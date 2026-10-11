@@ -1,0 +1,40 @@
+{
+  "$schema": "../schemas/primitive-impact-review-evidence.schema.json",
+  "schemaVersion": 1,
+  "reviewer": {
+    "id": "codex.independent_primitive_impact_review",
+    "type": "independent-agent-review",
+    "independentOf": "implementation-author"
+  },
+  "reviewedAt": "2026-10-11T22:37:13Z",
+  "reviewScope": "decision-to-primitive-impact",
+  "target": {
+    "primitiveCatalogSha256": "cbe633cf1072ba552fec452183dff814e2a336b2aaa64144a5f43a2691833e72",
+    "decisionSetSha256": "3f7fc148a47dd97bd974099d09a1b20af8d2cedd3a4fb822ada71866e42baf93",
+    "architectureReleaseManifestCommit": "61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c",
+    "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
+    "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
+  },
+  "outcome": "no-blocking-mapping-findings",
+  "summary": "Independent semantic inspection found no incorrect mappings in the pinned 23-decision set. ADR-0023 remains a tentative codex-delivery mapping and stays provisional while Architecture PR #17 is open and draft.",
+  "limitations": [
+    "This evidence records an independent AI review; it does not replace human approval or adopt proposed Architecture decisions.",
+    "Hashes bind the review to exact artifacts but cannot prove the semantic reasoning or make a judgment objectively true."
+  ],
+  "findings": [
+    {
+      "id": "IMPACT-001",
+      "severity": "P1",
+      "finding": "A released Primitive could previously accept a draft Architecture release and provisional decision mappings.",
+      "status": "addressed",
+      "resolution": "Release-readiness validation now requires a released Architecture pin and zero provisional decisions, with regression tests for both conditions."
+    },
+    {
+      "id": "IMPACT-002",
+      "severity": "P1",
+      "finding": "The impact manifest did not preserve an independent review identity or bind review evidence to exact artifacts.",
+      "status": "addressed",
+      "resolution": "A schema-validated review record now pins the catalog bytes, canonical decision set, Architecture manifest commit, source commit, and inventory digest."
+    }
+  ]
+}

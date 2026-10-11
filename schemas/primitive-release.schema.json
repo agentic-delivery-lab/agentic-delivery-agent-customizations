@@ -4,15 +4,29 @@
   "title": "Agentic Primitive release v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "releaseId", "version", "status", "architecture", "sourceCommit", "contentSha256", "capabilityPolicyVersion"],
+  "required": ["$schema", "schemaVersion", "releaseId", "version", "status", "architecture", "sourceCommit", "contentSha256", "capabilityPolicyVersion"],
   "properties": {
+    "$schema": { "const": "../schemas/primitive-release.schema.json" },
     "schemaVersion": { "const": 1 },
     "releaseId": { "type": "string", "pattern": "^urn:agentic-delivery:primitive-release:" },
     "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
     "status": { "enum": ["draft", "released", "withdrawn"] },
-    "architecture": { "type": "object", "required": ["id", "version", "sourceCommit"], "additionalProperties": false, "properties": { "id": { "type": "string" }, "version": { "type": "string" }, "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" } } },
-    "sourceCommit": { "type": "string", "minLength": 7, "pattern": "^[0-9a-f]+$" },
-    "contentSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
-    "capabilityPolicyVersion": { "type": "string" }
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "releaseManifestCommit", "releaseManifestSha256", "sourceCommit", "decisionInventoryPath", "decisionInventorySha256"],
+      "properties": {
+        "id": { "const": "urn:agentic-delivery:architecture:authority" },
+        "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+        "releaseManifestCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "releaseManifestSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decisionInventoryPath": { "const": "architecture/references/decision-inventory.yml" },
+        "decisionInventorySha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "contentSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "capabilityPolicyVersion": { "type": "string", "minLength": 1 }
   }
 }

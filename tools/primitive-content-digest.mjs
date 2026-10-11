@@ -12,16 +12,26 @@ const SHA = /^[0-9a-f]{40}$/;
 // its content digest describes this source tree and including the digest field
 // would make the value self-referential.
 const AUTHORITATIVE_ROOTS = [
+  '.github/CODEOWNERS',
+  '.github/workflows',
   'AGENTS.md',
   'README.md',
+  '.node-version',
   'agents',
   'capabilities',
+  'docs/decisions',
   'hooks',
   'instructions',
   'mcp',
   'manifests/primitive-catalog.yml',
+  'manifests/decision-impact-review.json',
+  'references',
   'schemas',
+  'package.json',
+  'pnpm-lock.yaml',
+  'scripts',
   'skills',
+  'tools',
   'validators',
 ];
 
