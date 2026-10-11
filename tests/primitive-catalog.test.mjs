@@ -41,7 +41,7 @@ test('extracted skills resolve architecture context through an immutable release
 test('draft release pins the extracted Architecture Authority', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.0-draft.6');
+  assert.equal(release.version, '0.1.0-draft.7');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
   assert.equal(release.architecture.version, '0.1.0-draft.24');
   assert.equal(release.architecture.sourceCommit, '7b1d21462f70c411e75ae67ce80dcf688c9973e8');
