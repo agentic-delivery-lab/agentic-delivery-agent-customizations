@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Source-Issue evaluation fixtures now exercise the GitHub Actions API path
+  through a synthetic adapter and fail if the validator bypasses that adapter.
+- The draft Primitive release advances to `0.1.0-draft.7` with the updated
+  evaluation runner and dataset pins.
 - The draft Primitive release advances to `0.1.0-draft.6` and consumes
   Architecture draft `0.1.0-draft.24` at
   `7b1d21462f70c411e75ae67ce80dcf688c9973e8`, pinning the evaluation report
@@ -32,8 +36,8 @@
   contracts, a manual-only semantic rubric, and replay reports validated
   against Architecture's immutable evaluation-report schema.
 - Added offline replay of candidate and baseline repository-delivery validators;
-  the adapter uses synthetic local Issue responses and performs no network or
-  paid-model calls.
+  source-Issue cases use synthetic GitHub Actions API responses without live
+  network or paid-model calls.
 - Added independent semantic-review and adoption limitations to generated
   evaluation reports; findings point to the existing owner Issue without
   changing repository or Project state.

@@ -2,7 +2,7 @@
   "$schema": "../contracts/evaluation-dataset.schema.json",
   "schemaVersion": 2,
   "id": "repository-delivery-validation-offline",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "classification": "synthetic",
   "cases": [
     {
@@ -36,9 +36,9 @@
       },
       "expectedOutcome": "pass",
       "task": "Validate that a source Issue is open in the selected repository.",
-      "stimulus": "The injected local adapter returns OPEN for synthetic Issue example/repository#7.",
+      "stimulus": "With GITHUB_ACTIONS=true, the injected API adapter returns OPEN for synthetic Issue example/repository#7.",
       "expectedOutcomeDescription": "The candidate validator accepts the open source Issue returned by the synthetic adapter.",
-      "acceptanceCriteria": ["The candidate accepts the exact synthetic Issue identity and state.", "The validator makes no network request."]
+      "acceptanceCriteria": ["The candidate accepts the exact synthetic Issue identity and state.", "The injected adapter returns a synthetic response without a live GitHub request."]
     },
     {
       "id": "reject-closed-source-issue",
@@ -51,9 +51,9 @@
       },
       "expectedOutcome": "fail",
       "task": "Reject a source Issue that is closed in the selected repository.",
-      "stimulus": "The injected local adapter returns CLOSED for synthetic Issue example/repository#8.",
+      "stimulus": "With GITHUB_ACTIONS=true, the injected API adapter returns CLOSED for synthetic Issue example/repository#8.",
       "expectedOutcomeDescription": "The candidate validator rejects the closed source Issue returned by the synthetic adapter.",
-      "acceptanceCriteria": ["The candidate rejects the exact synthetic Issue state.", "The validator makes no network request."]
+      "acceptanceCriteria": ["The candidate rejects the exact synthetic Issue state.", "The injected adapter returns a synthetic response without a live GitHub request."]
     }
   ]
 }

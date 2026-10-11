@@ -136,42 +136,64 @@ async function runFixture(validatorName, validatorModule, input) {
   if (validatorName === 'branch-name') {
     try {
       validatorModule.validateBranchName(input);
-      return true;
+      return {
+        accepted: true,
+        observation: 'The in-process branch-name validator accepted the synthetic input.',
+      };
     } catch (error) {
-      if (error instanceof validatorModule.BranchNameValidationError) return false;
+      if (error instanceof validatorModule.BranchNameValidationError) {
+        return {
+          accepted: false,
+          observation: 'The in-process branch-name validator rejected the synthetic input.',
+        };
+      }
       throw new Error(`Branch-name validator failed unexpectedly: ${error.message}`, { cause: error });
     }
   }
   if (validatorName !== 'source-issue') throw new Error(`Unsupported evaluation validator: ${validatorName}`);
 
   let adapterFault;
-  let networkAttempted = false;
+  let apiAdapterCalls = 0;
+  let accepted;
+  const expectedEndpoint = `https://api.github.com/repos/${input.repository}/issues/${input.issueNumber}`;
+  const syntheticToken = 'offline-evaluation-token';
   try {
     await validatorModule.validateSourceIssue(input.issueNumber, {
-      env: { GITHUB_REPOSITORY: input.repository },
-      execFileImpl: async (command, args) => {
-        if (command !== 'gh' || args[0] !== 'issue' || args[1] !== 'view') {
-          adapterFault = new Error('Synthetic adapter received an unexpected command.');
-          throw adapterFault;
-        }
-        if (args[2] !== input.issueNumber || args[4] !== input.repository) {
-          adapterFault = new Error('Synthetic adapter received a source outside the fixture.');
-          throw adapterFault;
-        }
-        return { stdout: `${input.state}\t${input.url}\n` };
+      env: {
+        GITHUB_REPOSITORY: input.repository,
+        GITHUB_ACTIONS: 'true',
+        GH_TOKEN: syntheticToken,
       },
-      fetchImpl: async () => {
-        networkAttempted = true;
-        throw new Error('Network access is disabled during offline evaluation.');
+      execFileImpl: async () => {
+        adapterFault = new Error('GitHub Actions fixture attempted an unexpected CLI command.');
+        throw adapterFault;
+      },
+      fetchImpl: async (endpoint, options) => {
+        apiAdapterCalls += 1;
+        if (endpoint !== expectedEndpoint
+          || options?.headers?.Authorization !== `Bearer ${syntheticToken}`) {
+          adapterFault = new Error('Synthetic API adapter received an unexpected request.');
+          throw adapterFault;
+        }
+        return {
+          ok: true,
+          async json() {
+            return { state: input.state.toLowerCase(), html_url: input.url };
+          },
+        };
       },
     });
-    return true;
+    accepted = true;
   } catch (error) {
-    if (networkAttempted) throw new Error('Source-issue validator attempted network access during offline evaluation.', { cause: error });
-    if (adapterFault) throw new Error('Source-issue validator exceeded the synthetic adapter boundary.', { cause: adapterFault });
-    if (error instanceof validatorModule.SourceIssueValidationError) return false;
-    throw new Error(`Source-issue validator failed unexpectedly: ${error.message}`, { cause: error });
+    if (adapterFault) throw new Error('Source-issue validator exceeded the synthetic API adapter boundary.', { cause: adapterFault });
+    if (error instanceof validatorModule.SourceIssueValidationError) accepted = false;
+    else throw new Error(`Source-issue validator failed unexpectedly: ${error.message}`, { cause: error });
   }
+  if (apiAdapterCalls !== 1) throw new Error(`Source-issue validator used the synthetic API adapter ${apiAdapterCalls} times; expected exactly once.`);
+  return {
+    accepted,
+    observation: `The synthetic GitHub Actions API adapter returned ${input.state} for ${input.repository}#${input.issueNumber}; the validator ${accepted ? 'accepted' : 'rejected'} the Issue.`,
+  };
 }
 
 function measurement(metricId, value, unit, generatedAt, datasetUrl) {
@@ -333,12 +355,12 @@ export async function replayEvaluation({
   const baselineChecks = [];
   for (const fixture of dataset.cases) {
     const candidateModule = fixture.validator === 'branch-name' ? candidateBranchModule : candidateIssueModule;
-    const candidateActual = await runFixture(fixture.validator, candidateModule, fixture.input);
-    const candidateMatched = expectedResult(candidateActual, fixture.expectedOutcome);
+    const candidateResult = await runFixture(fixture.validator, candidateModule, fixture.input);
+    const candidateMatched = expectedResult(candidateResult.accepted, fixture.expectedOutcome);
     candidateChecks.push({
       checkId: `candidate.${fixture.validator}.${fixture.id}`,
       outcome: candidateMatched ? 'pass' : 'fail',
-      details: `Expected ${fixture.expectedOutcome}; validator ${candidateActual ? 'accepted' : 'rejected'} the synthetic input.`,
+      details: `Expected ${fixture.expectedOutcome}; ${candidateResult.observation}`,
       ...(candidateMatched ? {} : { failureClass: 'correctness-regression' }),
       evidenceRefs: [`${datasetUrl}#${fixture.id}`],
     });
@@ -347,8 +369,8 @@ export async function replayEvaluation({
       ? baselineModules.get('baseline-branch-name-validator')
       : baselineModules.get('baseline-source-issue-validator');
     if (!baselineModule) throw new Error(`Baseline does not pin a ${fixture.validator} validator.`);
-    const baselineActual = await runFixture(fixture.validator, baselineModule, fixture.input);
-    baselineChecks.push(expectedResult(baselineActual, fixture.expectedOutcome));
+    const baselineResult = await runFixture(fixture.validator, baselineModule, fixture.input);
+    baselineChecks.push(expectedResult(baselineResult.accepted, fixture.expectedOutcome));
   }
 
   const passed = candidateChecks.filter(({ outcome }) => outcome === 'pass').length;

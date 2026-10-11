@@ -36,6 +36,9 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
     task && stimulus && expectedOutcome.description && expectedOutcome.acceptanceCriteria.length > 0
       && observedOutcome && evidenceRefs.length > 0
   )));
+  const sourceIssueCases = first.report.cases.filter(({ caseId }) => caseId.includes('source-issue'));
+  assert.equal(sourceIssueCases.length, 2);
+  assert.ok(sourceIssueCases.every(({ observedOutcome }) => observedOutcome.includes('synthetic GitHub Actions API adapter')));
   assert.equal(first.report.results.deterministicChecks.length, 4);
   assert.deepEqual(
     first.report.cases.map(({ outcome }) => outcome),

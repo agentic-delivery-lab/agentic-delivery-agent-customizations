@@ -2,7 +2,7 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "agentic-delivery-lab/agentic-delivery-primitives",
   "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
   "reportSchema": {
@@ -63,10 +63,10 @@
     },
     {
       "id": "evaluation-dataset",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "kind": "dataset",
       "path": "evaluations/datasets/repository-delivery-validation.json",
-      "sha256": "debcf604609bf60b07d728e07e2f1d2caac9b0cc22af71d9c1aafa36c53df328"
+      "sha256": "3ab5c06d7b075a7794d3204a656d2e84e1db66b61e82d03fedec20fe35c3cf4f"
     },
     {
       "id": "dataset-selection-policy",
@@ -105,10 +105,10 @@
     },
     {
       "id": "replay-runner",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "kind": "runner",
       "path": "tools/replay-evaluation.mjs",
-      "sha256": "4ef720409ef010a6852460dc293e1ca6ae717862d06ba3db7bdc4e03e9ce0063"
+      "sha256": "934f05b8d6c83b22c0eb1583433552ce10c7352d12c03b33d4d5cb4bbc1c331c"
     },
     {
       "id": "content-digest-runner",
