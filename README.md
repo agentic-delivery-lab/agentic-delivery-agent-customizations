@@ -24,6 +24,8 @@ it makes no live GitHub or model-service calls and cannot write Issues,
 Projects, or policy state. This draft evaluation mechanism is not adopted as
 a catalogued Primitive until Architecture Issue #11 is reviewed and merged
 and Primitive Issue #2 completes its ADR impact mapping.
+Pull-request CI retains the schema-validated synthetic report as a 14-day
+workflow artifact; missing report output fails the upload step.
 
 This local repository is a history-preserving extraction prepared for review;
 remote repository creation and organization publication remain operator steps.

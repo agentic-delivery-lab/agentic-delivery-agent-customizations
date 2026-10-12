@@ -4,6 +4,8 @@
 
 ### Changed
 
+- The draft Primitive release advances to `0.1.0-draft.8` with retained PR
+  evaluation-report artifacts.
 - Source-Issue evaluation fixtures now exercise the GitHub Actions API path
   through a synthetic adapter and fail if the validator bypasses that adapter.
 - The draft Primitive release advances to `0.1.0-draft.7` with the updated
@@ -32,6 +34,9 @@
 
 ### Added
 
+- Hosted pull-request evaluation now retains the schema-validated synthetic
+  report as a 14-day artifact through a full-SHA-pinned upload action; a
+  missing report fails validation.
 - Added versioned synthetic datasets, pinned deterministic grader and baseline
   contracts, a manual-only semantic rubric, and replay reports validated
   against Architecture's immutable evaluation-report schema.

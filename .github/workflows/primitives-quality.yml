@@ -41,7 +41,14 @@ jobs:
         run: pnpm primitive:check
       - name: Validate history-preserving extraction manifest
         run: pnpm migration:check
-      - name: Replay pinned offline evaluations
-        run: pnpm evaluation:check
+      - name: Replay pinned offline evaluations and retain the report
+        run: pnpm evaluation:replay > "${RUNNER_TEMP}/offline-evaluation-report.json"
+      - name: Upload the synthetic evaluation report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: offline-evaluation-report
+          path: ${{ runner.temp }}/offline-evaluation-report.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Run primitive tests
         run: pnpm test
