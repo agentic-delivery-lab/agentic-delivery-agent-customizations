@@ -4,6 +4,8 @@
 
 ### Changed
 
+- [Issue #2](https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/2) binds impact-review evidence to cataloged Primitive source bytes, requires release provenance to identify a commit object, and discovers metadata in every regular text file under the Primitive roots.
+
 - The draft4 release retains the preceding Architecture draft3 pin so the
   Architecture-to-Primitive release graph remains acyclic; Architecture draft4
   consumes this Primitive release in its generated traceability index.

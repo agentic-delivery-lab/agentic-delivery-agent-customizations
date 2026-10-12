@@ -55,6 +55,10 @@ export async function primitiveFiles(root, revision = 'HEAD') {
 
 export async function primitiveContentDigest(root, revision = 'HEAD') {
   if (!SHA.test(revision) && revision !== 'HEAD') throw new Error('Primitive revision must be HEAD or a 40-character commit SHA');
+  if (revision !== 'HEAD') {
+    const objectType = (await git(root, ['cat-file', '-t', revision])).trim();
+    if (objectType !== 'commit') throw new Error('Primitive source revision must identify a commit object');
+  }
   const files = await primitiveFiles(root, revision);
   if (files.length === 0) throw new Error('Agentic Primitives contains no authoritative files at the requested revision');
   const hash = createHash('sha256');

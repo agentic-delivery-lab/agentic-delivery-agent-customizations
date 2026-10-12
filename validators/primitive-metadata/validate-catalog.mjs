@@ -185,10 +185,17 @@ export function validateDecisionImpactCoverage({ architectureRelease, decisionIn
   return { decisions: rows.length, affected, noImpact, provisional };
 }
 
-export function validateSemanticReviewEvidence({ evidence, impactReview, catalogRaw, architecturePin }) {
+export function validateSemanticReviewEvidence({
+  evidence,
+  impactReview,
+  catalogRaw,
+  primitiveSourcesSha256,
+  architecturePin,
+}) {
   const target = evidence?.target;
   const expected = {
     primitiveCatalogSha256: sha256(catalogRaw),
+    primitiveSourcesSha256,
     decisionSetSha256: sha256(JSON.stringify(impactReview.decisions)),
     architectureReleaseManifestCommit: architecturePin.releaseManifestCommit,
     architectureSourceCommit: architecturePin.sourceCommit,
@@ -201,6 +208,18 @@ export function validateSemanticReviewEvidence({ evidence, impactReview, catalog
     throw new Error('semantic review evidence must have no blocking mapping findings');
   }
   return evidence;
+}
+
+export function primitiveSourcesDigest(sources) {
+  const sourceHash = createHash('sha256');
+  const orderedSources = [...sources].sort((left, right) => (left.path < right.path ? -1 : left.path > right.path ? 1 : 0));
+  for (const { path: relativePath, sourceBytes } of orderedSources) {
+    sourceHash.update(relativePath, 'utf8');
+    sourceHash.update('\0', 'utf8');
+    sourceHash.update(sourceBytes);
+    sourceHash.update('\0', 'utf8');
+  }
+  return sourceHash.digest('hex');
 }
 
 export function validatePrimitiveReleaseReadiness({ primitiveRelease, architectureRelease, provisionalDecisionCount }) {
@@ -230,7 +249,7 @@ async function loadPinnedArchitectureAuthority(architectureRoot, pin) {
   return validateArchitecturePin({ pin, releaseManifestRaw, decisionInventoryRaw });
 }
 
-async function walkFiles(repositoryRoot, relativeDirectory) {
+export async function walkFiles(repositoryRoot, relativeDirectory) {
   const absoluteDirectory = path.join(repositoryRoot, relativeDirectory);
   let entries;
   try {
@@ -243,7 +262,7 @@ async function walkFiles(repositoryRoot, relativeDirectory) {
   for (const entry of entries) {
     const relativePath = path.posix.join(relativeDirectory, entry.name);
     if (entry.isDirectory()) files.push(...await walkFiles(repositoryRoot, relativePath));
-    else if (entry.isFile() && /\.(?:md|mjs|js|json|ya?ml|toml)$/i.test(entry.name)) files.push(relativePath);
+    else if (entry.isFile()) files.push(relativePath);
   }
   return files;
 }
@@ -337,6 +356,7 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
     errors.push(error.message);
   }
 
+  let semanticReviewEvidence;
   if (impactReview) {
     try {
       const pointer = impactReview.semanticReview;
@@ -347,25 +367,21 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
       if (!SHA256.test(pointer.evidenceSha256 ?? '') || sha256(evidenceRaw) !== pointer.evidenceSha256) {
         throw new Error('semantic review evidence digest does not match its pinned SHA-256');
       }
-      const evidence = parseJson(evidenceRaw, IMPACT_REVIEW_EVIDENCE_PATH);
-      if (!validators.evidence(evidence)) {
+      semanticReviewEvidence = parseJson(evidenceRaw, IMPACT_REVIEW_EVIDENCE_PATH);
+      if (!validators.evidence(semanticReviewEvidence)) {
         throw new Error(`semantic review evidence schema validation failed: ${validators.ajv.errorsText(validators.evidence.errors)}`);
       }
-      validateSemanticReviewEvidence({
-        evidence,
-        impactReview,
-        catalogRaw,
-        architecturePin: release?.architecture,
-      });
     } catch (error) {
       errors.push(`semantic review evidence validation failed: ${error.message}`);
     }
   }
 
+  let primitiveSourcesSha256;
   if (catalog?.primitives) {
     const primitiveIds = new Set();
     const primitivePaths = new Set();
     const catalogByPath = new Map();
+    const primitiveSources = [];
     for (const primitive of catalog.primitives) {
       if (primitiveIds.has(primitive.id)) errors.push(`catalog primitive id is duplicated: ${primitive.id}`);
       primitiveIds.add(primitive.id);
@@ -383,8 +399,9 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
         continue;
       }
       try {
-        const source = await readFile(absolutePath, 'utf8');
-        const metadata = extractMetadata(source, primitive.path);
+        const sourceBytes = await readFile(absolutePath);
+        primitiveSources.push({ path: primitive.path, sourceBytes });
+        const metadata = extractMetadata(sourceBytes.toString('utf8'), primitive.path);
         if (!metadata) {
           errors.push(`${primitive.path} is missing agentic-primitive metadata`);
           continue;
@@ -399,16 +416,37 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
       }
     }
 
+    if (primitiveSources.length === catalog.primitives.length) {
+      primitiveSourcesSha256 = primitiveSourcesDigest(primitiveSources);
+    }
+
     for (const relativeRoot of METADATA_ROOTS) {
       for (const relativePath of await walkFiles(repositoryRoot, relativeRoot)) {
         try {
-          const metadata = extractMetadata(await readFile(path.join(repositoryRoot, relativePath), 'utf8'), relativePath);
+          const sourceBytes = await readFile(path.join(repositoryRoot, relativePath));
+          if (sourceBytes.includes(0)) continue;
+          const metadata = extractMetadata(sourceBytes.toString('utf8'), relativePath);
           if (!metadata) continue;
           if (!catalogByPath.has(relativePath)) errors.push(`${relativePath} has primitive metadata but is absent from the catalog`);
         } catch (error) {
           errors.push(error.message);
         }
       }
+    }
+  }
+
+  if (semanticReviewEvidence) {
+    try {
+      if (!primitiveSourcesSha256) throw new Error('cataloged primitive source digest cannot be calculated');
+      validateSemanticReviewEvidence({
+        evidence: semanticReviewEvidence,
+        impactReview,
+        catalogRaw,
+        primitiveSourcesSha256,
+        architecturePin: release?.architecture,
+      });
+    } catch (error) {
+      errors.push(`semantic review evidence validation failed: ${error.message}`);
     }
   }
 

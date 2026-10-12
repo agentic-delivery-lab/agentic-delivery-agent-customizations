@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { access, readFile } from 'node:fs/promises';
+import { access, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
 
@@ -10,6 +12,8 @@ import {
   validatePrimitiveReleaseReadiness,
   validatePrimitiveCatalog,
   validateSemanticReviewEvidence,
+  primitiveSourcesDigest,
+  walkFiles,
 } from '../validators/primitive-metadata/validate-catalog.mjs';
 import { primitiveContentDigest } from '../tools/primitive-content-digest.mjs';
 
@@ -134,6 +138,9 @@ test('released Primitives require a released Architecture Authority pin and no p
 test('semantic review evidence is bound to the exact catalog, decision set, and Architecture pins', () => {
   const fixture = impactFixture();
   const catalogRaw = '{"catalog":"pinned"}';
+  const primitiveSourcesSha256 = primitiveSourcesDigest([
+    { path: 'skills/example/SKILL.md', sourceBytes: Buffer.from('# Original\n') },
+  ]);
   const architecturePin = {
     releaseManifestCommit: 'b'.repeat(40),
     sourceCommit: 'a'.repeat(40),
@@ -143,6 +150,7 @@ test('semantic review evidence is bound to the exact catalog, decision set, and 
     outcome: 'no-blocking-mapping-findings',
     target: {
       primitiveCatalogSha256: createHash('sha256').update(catalogRaw).digest('hex'),
+      primitiveSourcesSha256,
       decisionSetSha256: createHash('sha256').update(JSON.stringify(fixture.impactReview.decisions)).digest('hex'),
       architectureReleaseManifestCommit: architecturePin.releaseManifestCommit,
       architectureSourceCommit: architecturePin.sourceCommit,
@@ -153,20 +161,70 @@ test('semantic review evidence is bound to the exact catalog, decision set, and 
     evidence,
     impactReview: fixture.impactReview,
     catalogRaw,
+    primitiveSourcesSha256,
     architecturePin,
   }), evidence);
   assert.throws(() => validateSemanticReviewEvidence({
     evidence,
     impactReview: fixture.impactReview,
     catalogRaw: `${catalogRaw} changed`,
+    primitiveSourcesSha256,
     architecturePin,
   }), /primitiveCatalogSha256 does not match/);
   assert.throws(() => validateSemanticReviewEvidence({
     evidence,
     impactReview: fixture.impactReview,
     catalogRaw,
+    primitiveSourcesSha256: 'f'.repeat(64),
+    architecturePin,
+  }), /primitiveSourcesSha256 does not match/);
+  const changedSourcesSha256 = primitiveSourcesDigest([
+    { path: 'skills/example/SKILL.md', sourceBytes: Buffer.from('# Changed\n') },
+  ]);
+  assert.notEqual(primitiveSourcesSha256, changedSourcesSha256);
+  assert.throws(() => validateSemanticReviewEvidence({
+    evidence,
+    impactReview: fixture.impactReview,
+    catalogRaw,
+    primitiveSourcesSha256: changedSourcesSha256,
+    architecturePin,
+  }), /primitiveSourcesSha256 does not match/);
+  assert.throws(() => validateSemanticReviewEvidence({
+    evidence,
+    impactReview: fixture.impactReview,
+    catalogRaw,
+    primitiveSourcesSha256,
     architecturePin: { ...architecturePin, sourceCommit: 'c'.repeat(40) },
   }), /architectureSourceCommit does not match/);
+});
+
+test('metadata discovery includes TypeScript source files', async () => {
+  const scratch = await mkdtemp(path.join(tmpdir(), 'primitive-metadata-discovery-'));
+  try {
+    await mkdir(path.join(scratch, 'validators'), { recursive: true });
+    await writeFile(path.join(scratch, 'validators', 'example.ts'), '// agentic-primitive: {"id":"example"}\n');
+    assert.deepEqual(await walkFiles(scratch, 'validators'), ['validators/example.ts']);
+  } finally {
+    await rm(scratch, { recursive: true, force: true });
+  }
+});
+
+test('primitive content digest rejects a tree object used as a source commit', async () => {
+  const scratch = await mkdtemp(path.join(tmpdir(), 'primitive-content-digest-'));
+  const git = (args) => execFileSync('git', ['-C', scratch, ...args], { encoding: 'utf8' }).trim();
+  try {
+    git(['init', '--quiet']);
+    git(['config', 'user.name', 'Test']);
+    git(['config', 'user.email', 'test@example.invalid']);
+    await mkdir(path.join(scratch, 'skills', 'example'), { recursive: true });
+    await writeFile(path.join(scratch, 'skills', 'example', 'SKILL.md'), '# Example\n');
+    git(['add', '.']);
+    git(['commit', '--quiet', '-m', 'fixture']);
+    const tree = git(['rev-parse', 'HEAD^{tree}']);
+    await assert.rejects(primitiveContentDigest(scratch, tree), /commit object/);
+  } finally {
+    await rm(scratch, { recursive: true, force: true });
+  }
 });
 
 test('Architecture manifest and inventory bytes must match their immutable release pins', () => {

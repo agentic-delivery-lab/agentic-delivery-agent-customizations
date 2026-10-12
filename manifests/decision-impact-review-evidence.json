@@ -10,6 +10,7 @@
   "reviewScope": "decision-to-primitive-impact",
   "target": {
     "primitiveCatalogSha256": "cbe633cf1072ba552fec452183dff814e2a336b2aaa64144a5f43a2691833e72",
+    "primitiveSourcesSha256": "d7d92f5ae47a8f9827b56864882c375f51ff1bf1f22a89dd7e989d63d16c3414",
     "decisionSetSha256": "3f7fc148a47dd97bd974099d09a1b20af8d2cedd3a4fb822ada71866e42baf93",
     "architectureReleaseManifestCommit": "61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c",
     "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",

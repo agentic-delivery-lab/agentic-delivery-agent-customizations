@@ -23,9 +23,10 @@
     "target": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primitiveCatalogSha256", "decisionSetSha256", "architectureReleaseManifestCommit", "architectureSourceCommit", "decisionInventorySha256"],
+      "required": ["primitiveCatalogSha256", "primitiveSourcesSha256", "decisionSetSha256", "architectureReleaseManifestCommit", "architectureSourceCommit", "decisionInventorySha256"],
       "properties": {
         "primitiveCatalogSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "primitiveSourcesSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         "decisionSetSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         "architectureReleaseManifestCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "architectureSourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
