@@ -1,0 +1,142 @@
+{
+  "$schema": "./contracts/evaluation-catalog.schema.json",
+  "schemaVersion": 1,
+  "id": "offline-evaluation-catalog",
+  "version": "0.3.0",
+  "repository": "agentic-delivery-lab/agentic-delivery-primitives",
+  "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
+  "reportSchema": {
+    "repository": "agentic-delivery-lab/agentic-delivery-architecture",
+    "commit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
+    "path": "architecture/contracts/evaluation-report.schema.json",
+    "sha256": "02ae624c21234bb7494dfc3308fe5cd54c112909e215192e2a07307651ebf55d"
+  },
+  "artifacts": [
+    {
+      "id": "evaluation-dataset-schema",
+      "version": "2.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-dataset.schema.json",
+      "sha256": "bd1751dbb2bb8d18ec16e1ac79c0b95d12747d6eca615fc9c298c414c0a08e68"
+    },
+    {
+      "id": "deterministic-grader-schema",
+      "version": "2.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-deterministic-grader.schema.json",
+      "sha256": "6d5e8455c3157fb3cd51b3997932400736eb032fcb32751191b61d35cc5dc854"
+    },
+    {
+      "id": "semantic-grader-schema",
+      "version": "2.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-semantic-grader.schema.json",
+      "sha256": "8ef2a8dc6efec950974fed2fb5e34925c6bb240f88ce04faa71ea01a03167450"
+    },
+    {
+      "id": "baseline-schema",
+      "version": "1.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-baseline.schema.json",
+      "sha256": "ff58768e08c6d645439f4e92fa062ed83b7c647ba234fb4e99f112e2e16a3665"
+    },
+    {
+      "id": "comparator-schema",
+      "version": "1.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-comparator.schema.json",
+      "sha256": "f05abed6610343681f55f599c1936b4b55ba21f2f40a8337d42c118620f5d5f9"
+    },
+    {
+      "id": "evaluation-catalog-schema",
+      "version": "1.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-catalog.schema.json",
+      "sha256": "cf73789d96ed8fd54bc5159bed247dbdb3f351182ddc9d61f6dd84cff31485c7"
+    },
+    {
+      "id": "selection-policy-schema",
+      "version": "1.0.0",
+      "kind": "contract",
+      "path": "evaluations/contracts/evaluation-selection-policy.schema.json",
+      "sha256": "3bdfd1a2e2c3a43aab3d57618cc510996ba845bcb5d889dea730a55a58ee496e"
+    },
+    {
+      "id": "evaluation-dataset",
+      "version": "0.3.0",
+      "kind": "dataset",
+      "path": "evaluations/datasets/repository-delivery-validation.json",
+      "sha256": "3ab5c06d7b075a7794d3204a656d2e84e1db66b61e82d03fedec20fe35c3cf4f"
+    },
+    {
+      "id": "dataset-selection-policy",
+      "version": "0.1.0",
+      "kind": "selection-policy",
+      "path": "evaluations/plans/repository-delivery-validation-selection.json",
+      "sha256": "a92e0f1d0bd24b5ee1d9b11f8e868441a3b599fdfefd808cb47a4be05d8e12a3"
+    },
+    {
+      "id": "deterministic-grader",
+      "version": "0.2.0",
+      "kind": "grader",
+      "path": "evaluations/graders/deterministic-grader.json",
+      "sha256": "0329656819a157d14829ca6f3a4d02cf149149012023b86baa0bef91e6938839"
+    },
+    {
+      "id": "semantic-rubric",
+      "version": "0.2.0",
+      "kind": "grader",
+      "path": "evaluations/graders/semantic-rubric.json",
+      "sha256": "ae5f4e8d45424b6fee00df357d7adcb9e334f5f01f385c273b86e04ddbc7b9fb"
+    },
+    {
+      "id": "synthetic-baseline",
+      "version": "0.1.0",
+      "kind": "baseline",
+      "path": "evaluations/baselines/primitives-main.json",
+      "sha256": "bc997deff3b48e0652e7f62ff3e70cb2d66e5cbe12d42d3f3ff9de81d7e4e462"
+    },
+    {
+      "id": "deterministic-pass-rate-comparator",
+      "version": "0.1.0",
+      "kind": "comparator",
+      "path": "evaluations/comparators/deterministic-pass-rate.json",
+      "sha256": "fd70b646d5b74db67e35173dda41202d6d3c3607b471e8a9d5caf2d124c22f88"
+    },
+    {
+      "id": "replay-runner",
+      "version": "0.3.0",
+      "kind": "runner",
+      "path": "tools/replay-evaluation.mjs",
+      "sha256": "934f05b8d6c83b22c0eb1583433552ce10c7352d12c03b33d4d5cb4bbc1c331c"
+    },
+    {
+      "id": "content-digest-runner",
+      "version": "1.0.0",
+      "kind": "runner",
+      "path": "tools/primitive-content-digest.mjs",
+      "sha256": "92cf57cec93012017d1e3aa0e16aaea069e315ee6e43dc891036b74962646d33"
+    },
+    {
+      "id": "candidate-branch-validator",
+      "version": "0.1.0",
+      "kind": "candidate",
+      "path": "validators/repository-delivery/validate-branch-name.mjs",
+      "sha256": "ad70451f8065ee0c7a4ed678ef9c4bd260ca8baedb18be80fec093b9a323bf07"
+    },
+    {
+      "id": "candidate-source-issue-validator",
+      "version": "0.1.0",
+      "kind": "candidate",
+      "path": "validators/repository-delivery/validate-source-issue.mjs",
+      "sha256": "267becef78bc0c97ef766852a745f618c66bf4dfa60d1210c84fb2a45570715a"
+    },
+    {
+      "id": "candidate-capabilities-catalog",
+      "version": "0.1.0",
+      "kind": "candidate",
+      "path": "capabilities/catalog.yml",
+      "sha256": "efeb21329ee250a8c4efb24bfe06aee9dcfcf89b9ba18264b332ee85187574ed"
+    }
+  ]
+}

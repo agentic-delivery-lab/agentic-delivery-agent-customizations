@@ -41,12 +41,13 @@ test('extracted skills resolve architecture context through an immutable release
 test('draft release pins the extracted Architecture Authority', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.0-draft.4');
+  assert.equal(release.version, '0.1.0-draft.8');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
-  assert.equal(release.architecture.version, '0.1.0-draft.3');
-  assert.equal(release.architecture.sourceCommit, 'd4714c9489fb14824ef0967903d34a73c3e437fb');
-  assert.equal(release.sourceCommit, 'a39267da377328dbfb1ed210a23b2628c224bed6');
-  assert.equal(release.contentSha256, '36a7e7e95a89ee00288f08a30ac41e4166e11516165e93af47b342026ce894d0');
+  assert.equal(release.architecture.version, '0.1.0-draft.24');
+  assert.equal(release.architecture.sourceCommit, '7b1d21462f70c411e75ae67ce80dcf688c9973e8');
+  assert.match(release.sourceCommit, /^[0-9a-f]{40}$/);
+  assert.match(release.contentSha256, /^[0-9a-f]{64}$/);
+  assert.equal(await primitiveContentDigest(root, release.sourceCommit), release.contentSha256);
 });
 
 test('Primitive content digest is deterministic for a pinned tree', async () => {

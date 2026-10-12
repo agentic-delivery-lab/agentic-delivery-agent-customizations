@@ -7,21 +7,28 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const SHA = /^[0-9a-f]{40}$/;
 
-// These roots contain the canonical reusable capability source and its
-// machine-readable catalog. The release manifest is deliberately excluded:
-// its content digest describes this source tree and including the digest field
-// would make the value self-referential.
+// These roots contain reusable primitives, offline evaluation evidence,
+// runtime pins, and the CI check that enforces their contracts. The
+// release manifest is deliberately excluded because including its digest
+// field would make the value self-referential.
 const AUTHORITATIVE_ROOTS = [
   'AGENTS.md',
   'README.md',
+  'CHANGELOG.md',
+  '.node-version',
+  '.github/workflows/primitives-quality.yml',
   'agents',
   'capabilities',
+  'evaluations',
   'hooks',
   'instructions',
   'mcp',
   'manifests/primitive-catalog.yml',
+  'package.json',
+  'pnpm-lock.yaml',
   'schemas',
   'skills',
+  'tools',
   'validators',
 ];
 

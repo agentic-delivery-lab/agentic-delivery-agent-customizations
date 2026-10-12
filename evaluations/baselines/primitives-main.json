@@ -1,0 +1,28 @@
+{
+  "$schema": "../contracts/evaluation-baseline.schema.json",
+  "schemaVersion": 1,
+  "id": "primitives-main-baseline",
+  "version": "e4933566fbf5b0f593830f8933f18fbd21024fa7",
+  "classification": "synthetic",
+  "status": "measured",
+  "sourceCommit": "e4933566fbf5b0f593830f8933f18fbd21024fa7",
+  "sourcePins": [
+    {
+      "id": "baseline-branch-name-validator",
+      "version": "0.1.0",
+      "repository": "agentic-delivery-lab/agentic-delivery-primitives",
+      "commit": "e4933566fbf5b0f593830f8933f18fbd21024fa7",
+      "path": "validators/repository-delivery/validate-branch-name.mjs",
+      "sha256": "ad70451f8065ee0c7a4ed678ef9c4bd260ca8baedb18be80fec093b9a323bf07"
+    },
+    {
+      "id": "baseline-source-issue-validator",
+      "version": "0.1.0",
+      "repository": "agentic-delivery-lab/agentic-delivery-primitives",
+      "commit": "e4933566fbf5b0f593830f8933f18fbd21024fa7",
+      "path": "validators/repository-delivery/validate-source-issue.mjs",
+      "sha256": "267becef78bc0c97ef766852a745f618c66bf4dfa60d1210c84fb2a45570715a"
+    }
+  ],
+  "reason": "This is the immutable pre-evaluation source snapshot. Baseline results are computed from these pinned validator blobs using the same synthetic cases as the candidate."
+}

@@ -10,10 +10,14 @@
   "scripts": {
     "primitive:check": "node tools/validate-primitive-catalog.mjs",
     "primitive:digest": "node tools/primitive-content-digest.mjs",
+    "evaluation:check": "node tools/replay-evaluation.mjs --check",
+    "evaluation:replay": "node tools/replay-evaluation.mjs --report",
     "migration:check": "node tools/validate-migration.mjs",
     "test": "node --test \"tests/**/*.test.mjs\""
   },
   "devDependencies": {
+    "ajv": "8.18.0",
+    "ajv-formats": "3.0.1",
     "gitmojis": "3.15.0"
   }
 }

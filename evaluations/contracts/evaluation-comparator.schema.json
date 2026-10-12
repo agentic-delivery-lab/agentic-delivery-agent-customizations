@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/evaluations/contracts/evaluation-comparator.schema.json",
+  "title": "Deterministic evaluation comparator v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "id", "version", "metricId", "unit", "method", "direction"],
+  "properties": {
+    "$schema": { "const": "../contracts/evaluation-comparator.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "metricId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "unit": { "type": "string", "minLength": 1 },
+    "method": { "const": "absolute-difference" },
+    "direction": { "enum": ["higher-is-better", "lower-is-better"] }
+  }
+}

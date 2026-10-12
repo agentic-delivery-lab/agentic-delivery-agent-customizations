@@ -1,0 +1,22 @@
+{
+  "$schema": "../contracts/evaluation-deterministic-grader.schema.json",
+  "schemaVersion": 2,
+  "id": "exact-outcome-grader",
+  "version": "0.1.0",
+  "method": "exact-expected-outcome",
+  "candidateValidators": ["branch-name", "source-issue"],
+  "baselinePolicy": "run-identical-synthetic-cases-at-pinned-source-commit",
+  "evaluator": {
+    "id": "exact-outcome-grader",
+    "kind": "deterministic-tool",
+    "version": "0.2.0"
+  },
+  "independence": {
+    "relation": "not-independent",
+    "basis": "The deterministic replay runner and candidate validators are maintained under the same owner task; this does not constitute independent semantic review."
+  },
+  "calibration": {
+    "status": "not-applicable",
+    "rationale": "Exact comparisons against explicit synthetic outcomes do not use a learned grader or claim calibration."
+  }
+}

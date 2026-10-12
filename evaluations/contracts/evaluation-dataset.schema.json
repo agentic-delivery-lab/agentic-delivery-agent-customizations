@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/evaluations/contracts/evaluation-dataset.schema.json",
+  "title": "Offline evaluation dataset v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "id", "version", "classification", "cases"],
+  "properties": {
+    "$schema": { "const": "../contracts/evaluation-dataset.schema.json" },
+    "schemaVersion": { "const": 2 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "classification": { "const": "synthetic" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "validator", "input", "expectedOutcome", "task", "stimulus", "expectedOutcomeDescription", "acceptanceCriteria"],
+            "properties": {
+              "id": { "$ref": "#/$defs/caseId" },
+              "validator": { "const": "branch-name" },
+              "input": { "type": "string", "minLength": 1 },
+              "expectedOutcome": { "$ref": "#/$defs/outcome" },
+              "task": { "$ref": "#/$defs/nonEmptyString" },
+              "stimulus": { "$ref": "#/$defs/nonEmptyString" },
+              "expectedOutcomeDescription": { "$ref": "#/$defs/nonEmptyString" },
+              "acceptanceCriteria": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" } }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "validator", "input", "expectedOutcome", "task", "stimulus", "expectedOutcomeDescription", "acceptanceCriteria"],
+            "properties": {
+              "id": { "$ref": "#/$defs/caseId" },
+              "validator": { "const": "source-issue" },
+              "input": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["issueNumber", "repository", "state", "url"],
+                "properties": {
+                  "issueNumber": { "type": "string", "pattern": "^[1-9][0-9]*$" },
+                  "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+                  "state": { "enum": ["OPEN", "CLOSED"] },
+                  "url": { "type": "string", "format": "uri" }
+                }
+              },
+              "expectedOutcome": { "$ref": "#/$defs/outcome" },
+              "task": { "$ref": "#/$defs/nonEmptyString" },
+              "stimulus": { "$ref": "#/$defs/nonEmptyString" },
+              "expectedOutcomeDescription": { "$ref": "#/$defs/nonEmptyString" },
+              "acceptanceCriteria": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" } }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "caseId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "outcome": { "enum": ["pass", "fail"] },
+    "nonEmptyString": { "type": "string", "minLength": 1 }
+  }
+}
