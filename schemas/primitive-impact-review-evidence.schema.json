@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/schemas/primitive-impact-review-evidence.schema.json",
+  "title": "Independent Primitive decision-impact review evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "reviewer", "reviewedAt", "reviewScope", "target", "outcome", "summary", "limitations", "findings"],
+  "properties": {
+    "$schema": { "const": "../schemas/primitive-impact-review-evidence.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "independentOf"],
+      "properties": {
+        "id": { "const": "codex.independent_primitive_impact_review" },
+        "type": { "const": "independent-agent-review" },
+        "independentOf": { "const": "implementation-author" }
+      }
+    },
+    "reviewedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "reviewScope": { "const": "decision-to-primitive-impact" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primitiveCatalogSha256", "primitiveSourcesSha256", "decisionSetSha256", "architectureReleaseManifestCommit", "architectureSourceCommit", "decisionInventorySha256"],
+      "properties": {
+        "primitiveCatalogSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "primitiveSourcesSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "decisionSetSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "architectureReleaseManifestCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "architectureSourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decisionInventorySha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "outcome": { "const": "no-blocking-mapping-findings" },
+    "summary": { "type": "string", "minLength": 30 },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 20 }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "finding", "status", "resolution"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^IMPACT-[0-9]{3}$" },
+          "severity": { "enum": ["P1", "P2", "P3"] },
+          "finding": { "type": "string", "minLength": 30 },
+          "status": { "const": "addressed" },
+          "resolution": { "type": "string", "minLength": 30 }
+        }
+      }
+    }
+  }
+}

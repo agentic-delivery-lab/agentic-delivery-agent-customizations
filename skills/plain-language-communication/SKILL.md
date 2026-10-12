@@ -1,4 +1,4 @@
-<!-- agentic-primitive: {"id":"plain-language-communication","kind":"skill","enforcement":"instructional","adrs":["ADR-0002"],"domains":["agentic-delivery-governance"]} -->
+<!-- agentic-primitive: {"id":"plain-language-communication","kind":"skill","enforcement":"instructional","decisionIds":["ADR-0002"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0002"]} -->
 
 ---
 name: plain-language-communication

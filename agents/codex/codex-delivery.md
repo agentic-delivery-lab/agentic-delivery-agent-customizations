@@ -1,4 +1,4 @@
-<!-- agentic-primitive: {"id":"codex-delivery","kind":"agent","enforcement":"instructional","adrs":["ADR-0009","ADR-0012","ADR-0015","ADR-0017"],"domains":["agentic-delivery-control-plane"]} -->
+<!-- agentic-primitive: {"id":"codex-delivery","kind":"agent","enforcement":"instructional","decisionIds":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0023"],"domains":["agentic-delivery-control-plane"],"adrs":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0023"]} -->
 
 # Source issue execution
 

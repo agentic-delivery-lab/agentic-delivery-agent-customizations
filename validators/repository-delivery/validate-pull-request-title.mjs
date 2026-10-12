@@ -1,4 +1,4 @@
-// agentic-primitive: {"id":"pull-request-title-validator","kind":"validator","enforcement":"deterministic","adrs":["ADR-0005"],"domains":["agentic-delivery-governance"]}
+// agentic-primitive: {"id":"pull-request-title-validator","kind":"validator","enforcement":"deterministic","decisionIds":["ADR-0005"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0005"]}
 
 import { spawn } from 'node:child_process';
 import { stat } from 'node:fs/promises';
