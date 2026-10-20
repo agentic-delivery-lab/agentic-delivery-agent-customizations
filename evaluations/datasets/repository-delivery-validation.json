@@ -2,7 +2,7 @@
   "$schema": "../contracts/evaluation-dataset.schema.json",
   "schemaVersion": 2,
   "id": "repository-delivery-validation-offline",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "classification": "synthetic",
   "cases": [
     {
@@ -13,7 +13,9 @@
       "task": "Validate a branch name that follows the issue-linked repository naming rule.",
       "stimulus": "The candidate validator receives feat/issue-3-offline-evaluations.",
       "expectedOutcomeDescription": "The candidate validator accepts this conforming lowercase branch name.",
-      "acceptanceCriteria": ["The candidate accepts the exact synthetic input."]
+      "acceptanceCriteria": [
+        "The candidate accepts the exact synthetic input."
+      ]
     },
     {
       "id": "reject-uppercase-branch",
@@ -23,7 +25,9 @@
       "task": "Reject a branch name whose issue-linked summary contains uppercase letters.",
       "stimulus": "The candidate validator receives feat/Issue-3-Offline-Evaluations.",
       "expectedOutcomeDescription": "The candidate validator rejects this nonconforming branch name.",
-      "acceptanceCriteria": ["The candidate rejects the exact synthetic input."]
+      "acceptanceCriteria": [
+        "The candidate rejects the exact synthetic input."
+      ]
     },
     {
       "id": "accept-open-source-issue",
@@ -38,7 +42,10 @@
       "task": "Validate that a source Issue is open in the selected repository.",
       "stimulus": "With GITHUB_ACTIONS=true, the injected API adapter returns OPEN for synthetic Issue example/repository#7.",
       "expectedOutcomeDescription": "The candidate validator accepts the open source Issue returned by the synthetic adapter.",
-      "acceptanceCriteria": ["The candidate accepts the exact synthetic Issue identity and state.", "The injected adapter returns a synthetic response without a live GitHub request."]
+      "acceptanceCriteria": [
+        "The candidate accepts the exact synthetic Issue identity and state.",
+        "The injected adapter returns a synthetic response without a live GitHub request."
+      ]
     },
     {
       "id": "reject-closed-source-issue",
@@ -53,7 +60,10 @@
       "task": "Reject a source Issue that is closed in the selected repository.",
       "stimulus": "With GITHUB_ACTIONS=true, the injected API adapter returns CLOSED for synthetic Issue example/repository#8.",
       "expectedOutcomeDescription": "The candidate validator rejects the closed source Issue returned by the synthetic adapter.",
-      "acceptanceCriteria": ["The candidate rejects the exact synthetic Issue state.", "The injected adapter returns a synthetic response without a live GitHub request."]
+      "acceptanceCriteria": [
+        "The candidate rejects the exact synthetic Issue state.",
+        "The injected adapter returns a synthetic response without a live GitHub request."
+      ]
     }
   ]
 }

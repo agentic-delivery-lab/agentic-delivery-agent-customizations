@@ -9,6 +9,8 @@
 
 ### Changed
 
+- Draft `0.1.0-draft.11` aligns dataset and grader definition versions with their catalog declarations and exact file digests. Historical source pins remain available; fixture cases and grading policy are unchanged.
+
 - The draft Primitive release advances to `0.1.0-draft.8` with retained PR
   evaluation-report artifacts.
 - Source-Issue evaluation fixtures now exercise the GitHub Actions API path

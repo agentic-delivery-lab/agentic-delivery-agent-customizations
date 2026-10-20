@@ -2,7 +2,7 @@
   "$schema": "../contracts/evaluation-semantic-grader.schema.json",
   "schemaVersion": 2,
   "id": "manual-semantic-review-rubric",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "method": "manual-only",
   "automatedInvocationAllowed": false,
   "evaluator": {

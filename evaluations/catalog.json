@@ -2,7 +2,7 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "repository": "agentic-delivery-lab/agentic-delivery-primitives",
   "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
   "reportSchema": {
@@ -66,7 +66,7 @@
       "version": "0.3.0",
       "kind": "dataset",
       "path": "evaluations/datasets/repository-delivery-validation.json",
-      "sha256": "3ab5c06d7b075a7794d3204a656d2e84e1db66b61e82d03fedec20fe35c3cf4f"
+      "sha256": "d4b94c075a974d7714aec57480f3d2f8717b52079ef9c982dd7665d48b276246"
     },
     {
       "id": "dataset-selection-policy",
@@ -80,14 +80,14 @@
       "version": "0.2.0",
       "kind": "grader",
       "path": "evaluations/graders/deterministic-grader.json",
-      "sha256": "0329656819a157d14829ca6f3a4d02cf149149012023b86baa0bef91e6938839"
+      "sha256": "6459d20411099a6471ec9e9a8dff4a3473c2090a807a97403f7622317a22b978"
     },
     {
       "id": "semantic-rubric",
       "version": "0.2.0",
       "kind": "grader",
       "path": "evaluations/graders/semantic-rubric.json",
-      "sha256": "ae5f4e8d45424b6fee00df357d7adcb9e334f5f01f385c273b86e04ddbc7b9fb"
+      "sha256": "40bbd88a758ed1b30cf672a3ce88ff48e11bbae74888ab05c481fad48947e53b"
     },
     {
       "id": "synthetic-baseline",
