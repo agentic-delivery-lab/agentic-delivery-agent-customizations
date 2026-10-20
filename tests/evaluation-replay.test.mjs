@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
 
-import { replayEvaluation } from '../tools/replay-evaluation.mjs';
+import { compareFixtureRates, replayEvaluation } from '../tools/replay-evaluation.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const architectureSchemaPath = path.resolve(
@@ -51,6 +51,7 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(first.report.graders.semantic.independence.relation, 'unknown');
   assert.equal(first.report.graders.semantic.calibration.status, 'not-applicable');
   assert.equal(first.report.improvementHypothesis.status, 'not-proposed');
+  assert.match(first.report.improvementHypothesis.rationale, /candidate 1; baseline 1/);
   assert.equal(first.report.baseline.status, 'measured');
   assert.equal(first.report.comparison.claim, 'no-change');
   assert.equal(first.report.review.status, 'pending');
@@ -84,3 +85,20 @@ test('offline evaluation rejects a selection policy registered after the run sta
     /Selection policy must be registered before the evaluation run starts/,
   );
 });
+
+for (const [candidate, baseline, direction, claim] of [
+  [0.5, 1, 'higher-is-better', 'regression'],
+  [1, 0.5, 'higher-is-better', 'improvement'],
+  [0.5, 1, 'lower-is-better', 'improvement'],
+  [1, 0.5, 'lower-is-better', 'regression'],
+  [1, 1, 'higher-is-better', 'no-change'],
+]) {
+  test(`comparison describes ${candidate}/${baseline} with ${direction} without inventing a hypothesis`, () => {
+    const comparison = compareFixtureRates(candidate, baseline, direction);
+    assert.equal(comparison.claim, claim);
+    assert.equal(comparison.improvementHypothesis.status, 'not-proposed');
+    assert.ok(comparison.improvementHypothesis.rationale.includes(`candidate ${candidate}; baseline ${baseline}`));
+    assert.doesNotMatch(comparison.improvementHypothesis.rationale, /produce the same result/);
+    assert.equal(comparison.regressionAssessment.severity, claim === 'regression' ? 'moderate' : 'none');
+  });
+}

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Offline replay now describes the actual candidate and baseline pass rates in its improvement-hypothesis rationale. A better or worse synthetic result cannot be described as equal, and no production hypothesis is inferred. Comparison regressions cover both metric directions; the updated runner is prepared as draft `0.1.0-draft.10`, with no release publication or runtime adoption.
+
+
 ### Changed
 
 - The draft Primitive release advances to `0.1.0-draft.8` with retained PR

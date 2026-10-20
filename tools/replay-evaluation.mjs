@@ -207,6 +207,23 @@ function measurement(metricId, value, unit, generatedAt, datasetUrl) {
   };
 }
 
+export function compareFixtureRates(candidateRate, baselineRate, direction) {
+  const claim = candidateRate === baselineRate
+    ? 'no-change'
+    : ((candidateRate > baselineRate) === (direction === 'higher-is-better') ? 'improvement' : 'regression');
+  return {
+    claim,
+    improvementHypothesis: {
+      status: 'not-proposed',
+      rationale: `Synthetic fixture pass rates: candidate ${candidateRate}; baseline ${baselineRate}. This small synthetic comparison does not establish a production improvement hypothesis.`,
+    },
+    regressionAssessment: {
+      severity: claim === 'regression' ? 'moderate' : 'none',
+      rationale: `Candidate deterministic fixture pass rate is ${candidateRate}; pinned baseline rate is ${baselineRate}. This statement applies only to this synthetic fixture set.`,
+    },
+  };
+}
+
 export async function replayEvaluation({
   root = rootDefault,
   architectureSchemaPath = process.env.ARCHITECTURE_REPORT_SCHEMA
@@ -381,9 +398,7 @@ export async function replayEvaluation({
   if (Date.parse(actualRunStartedAt) > Date.parse(reportGeneratedAt)) {
     throw new Error('Evaluation run start cannot be later than its generated report time.');
   }
-  const claim = candidateRate === baselineRate
-    ? 'no-change'
-    : ((candidateRate > baselineRate) === (comparator.direction === 'higher-is-better') ? 'improvement' : 'regression');
+  const comparison = compareFixtureRates(candidateRate, baselineRate, comparator.direction);
 
   const pinFor = (id) => {
     const item = artifact(catalog, id);
@@ -489,7 +504,7 @@ export async function replayEvaluation({
       measurement: baselineMeasurement,
     },
     comparison: {
-      claim,
+      claim: comparison.claim,
       comparator: {
         id: comparator.id,
         version: comparator.version,
@@ -499,10 +514,7 @@ export async function replayEvaluation({
       },
       candidateMeasurement,
     },
-    improvementHypothesis: {
-      status: 'not-proposed',
-      rationale: 'The candidate and pinned baseline produce the same result on a small synthetic fixture set; no improvement hypothesis or production claim is supported.',
-    },
+    improvementHypothesis: comparison.improvementHypothesis,
     uncertainty: {
       level: 'high',
       summary: 'The comparison covers only four synthetic fixtures and has not received independent semantic review.',
@@ -517,10 +529,7 @@ export async function replayEvaluation({
       reviewerId: null,
       rationale: 'Independent semantic review remains pending; the manual rubric is never invoked by replay.',
     },
-    regressionAssessment: {
-      severity: claim === 'regression' ? 'moderate' : 'none',
-      rationale: `Candidate deterministic fixture pass rate is ${candidateRate}; pinned baseline rate is ${baselineRate}. This statement applies only to this synthetic fixture set.`,
-    },
+    regressionAssessment: comparison.regressionAssessment,
     evidence: [
       { kind: 'source', ref: githubBlob(PRIMITIVES_REPOSITORY, candidateCommit, subjectArtifact.path) },
       { kind: 'dataset', ref: datasetUrl },
