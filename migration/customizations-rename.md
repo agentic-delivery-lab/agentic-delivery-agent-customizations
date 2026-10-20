@@ -1,17 +1,23 @@
 # Repository-name migration: Agent Customizations
 
 Source work: organization implementation plan W05 and this repository's Issue #2.
-This is a preparation record. The hosting rename and consumer cutover have not
-occurred, and this record does not activate a participant or approve a release.
+The hosting name is now observable, while consumer cutover and release/runtime
+admission remain separate work. This record does not activate a participant or
+approve a release.
 
 ## Identity and unchanged contracts
 
-The owner-selected destination is
-`agentic-delivery-lab/agentic-delivery-agent-customizations`. The repository being
-renamed is `agentic-delivery-lab/agentic-delivery-primitives`, GitHub repository
-ID `1380894656`. Immediately before and after the hosting rename, read back the
-repository ID and require an exact match. The destination must be unoccupied
-before the change. Do not reuse the old name for another repository.
+A read-only GitHub repository API check on 2026-10-20 returned canonical name
+`agentic-delivery-lab/agentic-delivery-agent-customizations`, repository ID
+`1380894656`, and default branch `main`. The ID matches the retained preparation
+record for historical name `agentic-delivery-lab/agentic-delivery-primitives`.
+This current readback does not itself establish the operator's before/after
+rename transaction or complete consumer cutover. The coordinating owner work
+remains [Control Plane #59](https://github.com/agentic-delivery-lab/agentic-delivery/issues/59).
+
+Before any future hosting rename or rollback, verify name availability and read
+back the exact repository ID before and after the operation. Do not reuse the
+historical name for another repository.
 
 The `agentic-primitives` domain context, primitive URNs, release IDs, source
 commits and historical decision origins retain their meaning. Agent
@@ -20,12 +26,13 @@ domain context or create a new one. Distribution remains a separate owner.
 
 ## Caller cutover
 
-Prepare current-name changes before the hosting operation. Current callers
-include Control Plane participant identity, selection and publication
+Verify current callers against the explicit canonical name and stable
+repository identity. The preparation inventory identified Control Plane participant identity, selection and publication
 validators; Architecture checkout and current context locations; Distribution
 source locks and projection generation; and the private adapter's source
 checkout and provenance. The public adapter has no direct old-name caller on
-the inventoried default branch. Recheck this inventory at cutover.
+the inventoried default branch. That inventory is historical; recheck current
+callers, source pins and access before declaring cutover complete.
 
 Keep exact repository-ID admission for the participant. An old-name redirect
 is not the acceptance test for a current caller. Test the explicit destination
