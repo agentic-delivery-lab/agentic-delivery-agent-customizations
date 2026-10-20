@@ -283,7 +283,7 @@ test('extracted skills resolve architecture context through an immutable release
 test('draft release pins exact Architecture manifest and source artifacts', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.0-draft.5');
+  assert.equal(release.version, '0.1.0-draft.9');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
   assert.equal(release.architecture.version, '0.1.0-draft.24');
   assert.equal(release.architecture.releaseManifestCommit, '61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c');
@@ -292,6 +292,15 @@ test('draft release pins exact Architecture manifest and source artifacts', asyn
   assert.equal(release.architecture.decisionInventorySha256, '87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592');
   assert.match(release.sourceCommit, /^[0-9a-f]{40}$/);
   assert.match(release.contentSha256, /^[0-9a-f]{64}$/);
+});
+
+test('the proposed release contains the current authoritative capability content', async () => {
+  const release = JSON.parse(await readFile(path.join(root, 'manifests/primitive-release.json'), 'utf8'));
+  assert.equal(
+    await primitiveContentDigest(root, release.sourceCommit),
+    await primitiveContentDigest(root, 'HEAD'),
+    'The proposed release omits authoritative changes from this branch.',
+  );
 });
 
 test('Primitive content digest is deterministic for a pinned tree', async () => {
