@@ -228,7 +228,7 @@ export async function replayEvaluation({
   root = rootDefault,
   architectureSchemaPath = process.env.ARCHITECTURE_REPORT_SCHEMA
     ? path.resolve(root, process.env.ARCHITECTURE_REPORT_SCHEMA)
-    : path.resolve(root, '../agentic-delivery-architecture/architecture/contracts/evaluation-report.schema.json'),
+    : path.resolve(root, process.env.ARCHITECTURE_AUTHORITY_ROOT ?? '../agentic-delivery-architecture', 'architecture/contracts/evaluation-report.schema.json'),
   generatedAt,
   runStartedAt,
 } = {}) {
@@ -474,6 +474,11 @@ export async function replayEvaluation({
         sourcePin: sourcePin(PRIMITIVES_REPOSITORY, candidateCommit, 'evaluations/catalog.json', catalogDigest),
       },
       {
+        id: 'replay-runner',
+        version: artifact(catalog, 'replay-runner').version,
+        sourcePin: pinFor('replay-runner'),
+      },
+      {
         id: 'primitive-content-digest',
         version: artifact(catalog, 'content-digest-runner').version,
         sourcePin: pinFor('content-digest-runner'),
@@ -491,7 +496,7 @@ export async function replayEvaluation({
       ...baseline.sourcePins.map((pin) => ({ id: pin.id, version: pin.version, sourcePin: baselinePinFor(pin) })),
     ],
     graders: {
-      deterministic: pinnedDefinition(catalog, 'replay-runner', PRIMITIVES_REPOSITORY, candidateCommit, grader),
+      deterministic: pinnedDefinition(catalog, 'deterministic-grader', PRIMITIVES_REPOSITORY, candidateCommit, grader),
       semantic: pinnedDefinition(catalog, 'semantic-rubric', PRIMITIVES_REPOSITORY, candidateCommit, semanticRubric),
     },
     results: {

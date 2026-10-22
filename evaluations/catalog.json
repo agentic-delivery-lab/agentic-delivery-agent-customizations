@@ -2,7 +2,7 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "repository": "agentic-delivery-lab/agentic-delivery-primitives",
   "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
   "reportSchema": {
@@ -105,10 +105,10 @@
     },
     {
       "id": "replay-runner",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "kind": "runner",
       "path": "tools/replay-evaluation.mjs",
-      "sha256": "35a2363c1b07cecb0731927f9897eb37acc459c6f9ee9b5f93b496bd6b788dea"
+      "sha256": "2e23f2921ed1c29f443c931e72ad6d7ac0079172e116b555f1b9a341629726ff"
     },
     {
       "id": "content-digest-runner",

@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { promisify } from 'node:util';
 import { test } from 'node:test';
 
 import { compareFixtureRates, replayEvaluation } from '../tools/replay-evaluation.mjs';
@@ -8,7 +13,7 @@ const root = path.resolve(import.meta.dirname, '..');
 const architectureSchemaPath = path.resolve(
   root,
   process.env.ARCHITECTURE_REPORT_SCHEMA
-    ?? '../agentic-delivery-architecture/architecture/contracts/evaluation-report.schema.json',
+    ?? path.join(process.env.ARCHITECTURE_AUTHORITY_ROOT ?? '../agentic-delivery-architecture', 'architecture/contracts/evaluation-report.schema.json'),
 );
 const runStartedAt = '2026-10-10T23:21:15.000Z';
 const generatedAt = '2026-10-10T23:21:16.000Z';
@@ -72,6 +77,45 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.ok(candidatePins.every(({ sourcePin }) => sourcePin.commit === first.candidateCommit));
   assert.ok(baselinePins.every(({ sourcePin }) => sourcePin.commit === 'e4933566fbf5b0f593830f8933f18fbd21024fa7'));
   assert.equal(first.reportSchemaValid, true);
+});
+
+test('deterministic grader metadata is pinned to its definition and the runner is a dependency', async () => {
+  const { report, candidateCommit } = await replayEvaluation({ root, architectureSchemaPath, runStartedAt, generatedAt });
+  const bytes = await readFile(path.join(root, 'evaluations/graders/deterministic-grader.json'));
+  const definition = JSON.parse(bytes);
+  assert.equal(report.graders.deterministic.id, 'deterministic-grader');
+  assert.equal(report.graders.deterministic.version, definition.version);
+  assert.equal(report.graders.deterministic.sourcePin.path, 'evaluations/graders/deterministic-grader.json');
+  assert.equal(report.graders.deterministic.sourcePin.commit, candidateCommit);
+  assert.equal(report.graders.deterministic.sourcePin.sha256, createHash('sha256').update(bytes).digest('hex'));
+  for (const field of ['evaluator', 'independence', 'calibration']) {
+    assert.deepEqual(report.graders.deterministic[field], definition[field]);
+  }
+  const runner = report.dependencies.find(({ id }) => id === 'replay-runner');
+  assert.ok(runner);
+  assert.equal(runner.sourcePin.path, 'tools/replay-evaluation.mjs');
+  assert.equal(runner.sourcePin.commit, candidateCommit);
+  const runnerBytes = await readFile(path.join(root, runner.sourcePin.path));
+  assert.equal(runner.sourcePin.sha256, createHash('sha256').update(runnerBytes).digest('hex'));
+});
+
+test('local replay honors the documented Architecture root and still rejects tampered schema bytes', async (t) => {
+  const fixture = await mkdtemp(path.join(tmpdir(), 'evaluation-architecture-root-'));
+  t.after(() => rm(fixture, { recursive: true, force: true }));
+  const schema = path.join(fixture, 'architecture/contracts/evaluation-report.schema.json');
+  await mkdir(path.dirname(schema), { recursive: true });
+  const bytes = await readFile(architectureSchemaPath);
+  await writeFile(schema, Buffer.concat([bytes, Buffer.from('\n')]));
+  const env = { ...process.env, ARCHITECTURE_AUTHORITY_ROOT: fixture };
+  delete env.ARCHITECTURE_REPORT_SCHEMA;
+  const exec = promisify(execFile);
+  await assert.rejects(
+    exec(process.execPath, ['tools/replay-evaluation.mjs', '--check'], { cwd: root, env }),
+    (error) => error.code === 1 && /report schema digest mismatch/i.test(error.stderr),
+  );
+  await writeFile(schema, bytes);
+  const result = await exec(process.execPath, ['tools/replay-evaluation.mjs', '--check'], { cwd: root, env });
+  assert.match(result.stdout, /no-change/);
 });
 
 test('offline evaluation rejects a selection policy registered after the run starts', async () => {

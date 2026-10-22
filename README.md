@@ -34,12 +34,20 @@ to consumer surfaces remains a separate reviewed operation.
 
 ```text
 pnpm install --frozen-lockfile
-ARCHITECTURE_AUTHORITY_ROOT=/path/to/agentic-delivery-architecture pnpm primitive:check
+export ARCHITECTURE_AUTHORITY_ROOT=/path/to/agentic-delivery-architecture
+pnpm primitive:check
 pnpm migration:check
 pnpm evaluation:check
 pnpm test
 ```
 
-Set `ARCHITECTURE_AUTHORITY_ROOT` to a Git checkout containing the pinned
-Architecture commits when running the validator locally. CI checks out the
-release-manifest commit directly.
+Set `ARCHITECTURE_AUTHORITY_ROOT` for all local checks to a Git checkout
+containing the pinned Architecture commits. Evaluation replay reads its schema
+from that root and still verifies the pinned schema digest. The optional
+`ARCHITECTURE_REPORT_SCHEMA` file path takes precedence when explicitly set;
+when neither setting is provided, replay uses the sibling Architecture
+checkout. CI checks out the release-manifest commit directly.
+
+Integrate prepared releases with a merge commit. The prepared source must
+remain an ancestor of the reviewed head and accepted main; squash or rebase
+can discard the pinned source object required by catalog validation and replay.
