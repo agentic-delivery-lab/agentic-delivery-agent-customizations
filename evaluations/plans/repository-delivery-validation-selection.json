@@ -1,0 +1,28 @@
+{
+  "$schema": "../contracts/evaluation-selection-policy.schema.json",
+  "schemaVersion": 1,
+  "id": "repository-delivery-validation-selection",
+  "version": "0.1.0",
+  "datasetId": "repository-delivery-validation-offline",
+  "partition": "synthetic",
+  "sampling": "census",
+  "registeredAt": "2026-10-10T23:21:14Z",
+  "eligiblePopulation": "All four cases in the pinned synthetic repository-delivery validation dataset.",
+  "eligibleCaseIds": [
+    "valid-lowercase-branch",
+    "reject-uppercase-branch",
+    "accept-open-source-issue",
+    "reject-closed-source-issue"
+  ],
+  "includedCaseIds": [
+    "valid-lowercase-branch",
+    "reject-uppercase-branch",
+    "accept-open-source-issue",
+    "reject-closed-source-issue"
+  ],
+  "inclusionCriteria": [
+    "Include every case in the immutable dataset source pin; do not filter by candidate result.",
+    "Evaluate the exact same case set against the candidate and the pinned baseline."
+  ],
+  "exclusions": []
+}

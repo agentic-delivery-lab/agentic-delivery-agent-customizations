@@ -1,0 +1,10 @@
+{
+  "$schema": "../contracts/evaluation-comparator.schema.json",
+  "schemaVersion": 1,
+  "id": "deterministic-fixture-pass-rate",
+  "version": "0.1.0",
+  "metricId": "deterministic-fixture-pass-rate",
+  "unit": "fraction",
+  "method": "absolute-difference",
+  "direction": "higher-is-better"
+}

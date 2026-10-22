@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/evaluations/contracts/evaluation-baseline.schema.json",
+  "title": "Evaluation baseline pin v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "id", "version", "classification", "status", "sourceCommit", "sourcePins", "reason"],
+  "properties": {
+    "$schema": { "const": "../contracts/evaluation-baseline.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "version": { "type": "string", "minLength": 1 },
+    "classification": { "const": "synthetic" },
+    "status": { "const": "measured" },
+    "sourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sourcePins": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/sourcePin" } },
+    "reason": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sourcePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "repository", "commit", "path", "sha256"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "version": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "path": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\s]+$" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

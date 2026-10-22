@@ -7,6 +7,15 @@ decision references, and immutable source evidence.
 
 The architecture direction is one way:
 
+Offline evaluations under `evaluations/` use synthetic fixtures and deterministic
+graders over pinned validator blobs. A separate semantic rubric is manual-only.
+Replay uses an injected GitHub Actions API adapter, makes no live GitHub or
+model-service calls, and cannot write Issues, Projects or policy. Reports bind
+the exact Architecture schema bytes and candidate/baseline source commits.
+CI retains the schema-validated synthetic report for 14 days. This source
+integration does not admit evaluation tooling as a runtime capability or prove
+production improvement.
+
 ```text
 Architecture Authority -> Agentic Primitives -> approved distribution surfaces
                                        -> Delivery Control Plane selection
@@ -25,11 +34,20 @@ to consumer surfaces remains a separate reviewed operation.
 
 ```text
 pnpm install --frozen-lockfile
-ARCHITECTURE_AUTHORITY_ROOT=/path/to/agentic-delivery-architecture pnpm primitive:check
+export ARCHITECTURE_AUTHORITY_ROOT=/path/to/agentic-delivery-architecture
+pnpm primitive:check
 pnpm migration:check
+pnpm evaluation:check
 pnpm test
 ```
 
-Set `ARCHITECTURE_AUTHORITY_ROOT` to a Git checkout containing the pinned
-Architecture commits when running the validator locally. CI checks out the
-release-manifest commit directly.
+Set `ARCHITECTURE_AUTHORITY_ROOT` for all local checks to a Git checkout
+containing the pinned Architecture commits. Evaluation replay reads its schema
+from that root and still verifies the pinned schema digest. The optional
+`ARCHITECTURE_REPORT_SCHEMA` file path takes precedence when explicitly set;
+when neither setting is provided, replay uses the sibling Architecture
+checkout. CI checks out the release-manifest commit directly.
+
+Integrate prepared releases with a merge commit. The prepared source must
+remain an ancestor of the reviewed head and accepted main; squash or rebase
+can discard the pinned source object required by catalog validation and replay.

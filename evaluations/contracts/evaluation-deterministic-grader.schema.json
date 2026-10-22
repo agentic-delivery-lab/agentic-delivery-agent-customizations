@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/evaluations/contracts/evaluation-deterministic-grader.schema.json",
+  "title": "Deterministic evaluation grader v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "id", "version", "method", "candidateValidators", "baselinePolicy", "evaluator", "independence", "calibration"],
+  "properties": {
+    "$schema": { "const": "../contracts/evaluation-deterministic-grader.schema.json" },
+    "schemaVersion": { "const": 2 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "method": { "const": "exact-expected-outcome" },
+    "candidateValidators": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["branch-name", "source-issue"] } },
+    "baselinePolicy": { "const": "run-identical-synthetic-cases-at-pinned-source-commit" },
+    "evaluator": { "$ref": "#/$defs/evaluator" },
+    "independence": { "$ref": "#/$defs/independence" },
+    "calibration": { "$ref": "#/$defs/calibration" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "evaluator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "const": "deterministic-tool" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "independence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relation", "basis"],
+      "properties": {
+        "relation": { "enum": ["independent", "not-independent", "unknown"] },
+        "basis": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "calibration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "rationale"],
+      "properties": {
+        "status": { "enum": ["verified", "inconclusive", "not-applicable"] },
+        "evaluatorVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "datasetPin": { "$ref": "#/$defs/sourcePin" },
+        "resultRef": { "type": "string", "format": "uri-reference" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "allOf": [{
+        "if": { "properties": { "status": { "const": "verified" } }, "required": ["status"] },
+        "then": { "required": ["evaluatorVersion", "datasetPin", "resultRef"] }
+      }]
+    },
+    "sourcePin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "commit", "path", "sha256"],
+      "properties": {
+        "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}
