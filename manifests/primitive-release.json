@@ -1,8 +1,8 @@
 {
   "$schema": "../schemas/primitive-release.schema.json",
   "schemaVersion": 1,
-  "releaseId": "urn:agentic-delivery:primitive-release:0.1.0-draft.12",
-  "version": "0.1.0-draft.12",
+  "releaseId": "urn:agentic-delivery:primitive-release:0.1.0-draft.13",
+  "version": "0.1.0-draft.13",
   "status": "draft",
   "architecture": {
     "id": "urn:agentic-delivery:architecture:authority",
@@ -13,7 +13,7 @@
     "decisionInventoryPath": "architecture/references/decision-inventory.yml",
     "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
   },
-  "sourceCommit": "db05025133d6b10369571eacee62e2daff3cb6c7",
-  "contentSha256": "c28b3772308773d2abf0a8bf4776a9f091b33ddaa5dfd4a4c1c945766e7d629d",
+  "sourceCommit": "cf3193ab127a0906fa1ffc8fbb5efaf0c5ccce1b",
+  "contentSha256": "6ad53cd3d2d2aff284fab042fb46993c2a84d5d386397c7523298d275b90e444",
   "capabilityPolicyVersion": "0.1.0"
 }
