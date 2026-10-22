@@ -1,10 +1,12 @@
 # Architecture Authority reference
 
 This repository does not carry a second copy of architecture decisions or the
-domain register. Resolve the Architecture Authority source commit from
-`manifests/primitive-release.json` at
-`architecture.sourceCommit`, then read the following paths from that exact
-commit:
+domain register. Resolve the Architecture Authority release-manifest commit
+and verify its SHA-256 against `architecture.releaseManifestCommit` and
+`architecture.releaseManifestSha256` in `manifests/primitive-release.json`.
+Read that manifest's `sourceCommit`, then verify the pinned decision-inventory
+path and SHA-256 before using the Architecture records. Read Architecture
+content only from the exact commit recorded as `sourceCommit`:
 
 - `architecture/domain/README.md` — bounded-context and terminology change
   rules;
@@ -21,5 +23,5 @@ identifier and release, but it must not copy the Architecture implementation
 or maintain a competing register.
 
 The release pin is provisional while the Primitive release is `draft`. A
-change to the Architecture source commit requires a reviewed Primitive release
-update and regenerated traceability evidence.
+change to either Architecture commit or digest requires a reviewed Primitive
+release update and regenerated traceability evidence.

@@ -1,0 +1,333 @@
+{
+  "$schema": "../schemas/primitive-impact-review.schema.json",
+  "schemaVersion": 1,
+  "architectureVersion": "0.1.0-draft.24",
+  "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
+  "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592",
+  "semanticReview": {
+    "evidencePath": "manifests/decision-impact-review-evidence.json",
+    "evidenceSha256": "6a8c0e7c075578d7bc7ce83e08e16cb95f4f64229ba791e28f586f074ddf5c47"
+  },
+  "decisions": [
+    {
+      "decisionId": "ADR-0001",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "architecture-decision",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The skill provides the decision-authoring and architecture-record workflow used by this decision."
+    },
+    {
+      "decisionId": "ADR-0002",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "plain-language-communication",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The communication skill implements the human-agent writing contract for primitive instructions."
+    },
+    {
+      "decisionId": "ADR-0003",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "ubiquitous-language",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The language skill defines bounded-context vocabulary guidance used across primitive content."
+    },
+    {
+      "decisionId": "ADR-0004",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "delivery-workflow",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "commit-range-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The workflow prescribes trunk-based delivery and the commit-range validator checks its repository history boundary."
+    },
+    {
+      "decisionId": "ADR-0005",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "delivery-workflow",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "commit-range-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "gitmoji-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "pull-request-title-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The workflow and deterministic commit and title validators implement the repository's commit-message conventions."
+    },
+    {
+      "decisionId": "ADR-0006",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "delivery-workflow",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "changelog-structure-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The workflow describes curated changelog updates and the validator enforces their document structure."
+    },
+    {
+      "decisionId": "ADR-0007",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "delivery-workflow",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "issue-branch-name-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "pull-request-branch-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "source-issue-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The workflow and branch and source-issue validators implement issue-linked branch identity and delivery checks."
+    },
+    {
+      "decisionId": "ADR-0008",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "delivery-workflow",
+          "version": "0.1.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "toolchain-policy-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The workflow and toolchain validator constrain dependency-manager use and delayed dependency adoption."
+    },
+    {
+      "decisionId": "ADR-0009",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The delivery agent follows the source-issue, task-budget, and continuation boundary implemented by this decision."
+    },
+    {
+      "decisionId": "ADR-0011",
+      "reviewStatus": "reviewed",
+      "disposition": "no-impact",
+      "affectedPrimitives": [],
+      "rationale": "Harness review execution and evidence belong to the Control Plane; this catalog contains primitive definitions, not the review service."
+    },
+    {
+      "decisionId": "ADR-0012",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The delivery agent uses GitHub Issues as lifecycle context and keeps repository changes tied to those source issues."
+    },
+    {
+      "decisionId": "ADR-0013",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "primitive-catalog-validator",
+          "version": "0.1.0",
+          "scope": "catalog-contract"
+        }
+      ],
+      "rationale": "The catalog validator derives complete decision-to-primitive coverage from the pinned Architecture inventory."
+    },
+    {
+      "decisionId": "ADR-0015",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The delivery agent carries exact issue and session context; runtime isolation remains owned by the Control Plane."
+    },
+    {
+      "decisionId": "ADR-0016",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "pull-request-body-validator",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The pull-request body validator enforces the structured description contract required by this decision."
+    },
+    {
+      "decisionId": "ADR-0017",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The delivery agent defines the user invocation boundary while webhook authentication remains Control Plane-owned."
+    },
+    {
+      "decisionId": "ADR-0018",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "primitive-catalog-validator",
+          "version": "0.1.0",
+          "scope": "release-contract"
+        }
+      ],
+      "rationale": "The catalog validator verifies immutable Primitive and Architecture release references and the source content digest."
+    },
+    {
+      "decisionId": "ADR-0019",
+      "reviewStatus": "reviewed",
+      "disposition": "no-impact",
+      "affectedPrimitives": [],
+      "rationale": "The issue-field migration and lifecycle authority are Control Plane concerns; the Primitive catalog has no delivery-state fields."
+    },
+    {
+      "decisionId": "ADP-0001",
+      "reviewStatus": "reviewed",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "primitive-catalog-validator",
+          "version": "0.1.0",
+          "scope": "release-contract"
+        }
+      ],
+      "rationale": "The validator enforces the catalog, release provenance, and metadata contracts at the Primitive release boundary."
+    },
+    {
+      "decisionId": "ADD-0001",
+      "reviewStatus": "reviewed",
+      "disposition": "no-impact",
+      "affectedPrimitives": [],
+      "rationale": "Distribution projection ownership does not change the behavior of cataloged primitives; generated consumer copies remain outside this repository."
+    },
+    {
+      "decisionId": "ADR-0020",
+      "reviewStatus": "provisional",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "architecture-decision",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "If adopted, the proposed canonical-source rule requires this skill to retire local ADP prose in favor of a pinned Architecture reference."
+    },
+    {
+      "decisionId": "ADR-0021",
+      "reviewStatus": "provisional",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "architecture-decision",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "If adopted, the proposed shared decision-artifact contract may change the skill's authoring and review guidance."
+    },
+    {
+      "decisionId": "ADR-0022",
+      "reviewStatus": "provisional",
+      "disposition": "no-impact",
+      "affectedPrimitives": [],
+      "rationale": "The proposed Neon webhook replay state is Control Plane runtime behavior and no cataloged Primitive owns that storage."
+    },
+    {
+      "decisionId": "ADR-0023",
+      "reviewStatus": "provisional",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.1.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The proposed Projects-led planning context could affect how this agent consumes source-Issue planning facts; no Project authority is claimed."
+    }
+  ]
+}

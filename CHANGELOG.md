@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Proposed Primitive draft `0.1.0-draft.9` pins reviewed source `035547fc1c7885e96cf9a8f8295c94a26f269847`, including source-bound review evidence, commit-object validation and complete metadata discovery. CI rejects a proposed release that omits current authoritative content. Earlier draft artifacts remain unchanged; no release or runtime consumer is activated.
+
+- [Issue #2](https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/2) binds impact-review evidence to cataloged Primitive source bytes, requires release provenance to identify a commit object, and discovers metadata in every regular text file under the Primitive roots.
+
 - The draft4 release retains the preceding Architecture draft3 pin so the
   Architecture-to-Primitive release graph remains acyclic; Architecture draft4
   consumes this Primitive release in its generated traceability index.

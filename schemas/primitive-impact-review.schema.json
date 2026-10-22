@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/schemas/primitive-impact-review.schema.json",
+  "title": "Architecture decision impact review for Agentic Primitives v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "architectureVersion", "architectureSourceCommit", "decisionInventorySha256", "semanticReview", "decisions"],
+  "properties": {
+    "$schema": { "const": "../schemas/primitive-impact-review.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "architectureVersion": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "architectureSourceCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "decisionInventorySha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "semanticReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidencePath", "evidenceSha256"],
+      "properties": {
+        "evidencePath": { "const": "manifests/decision-impact-review-evidence.json" },
+        "evidenceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/decision" }
+    }
+  },
+  "$defs": {
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decisionId", "reviewStatus", "disposition", "affectedPrimitives", "rationale"],
+      "properties": {
+        "decisionId": { "type": "string", "pattern": "^(ADR|ADP|ADD)-[0-9]{4}$" },
+        "reviewStatus": { "enum": ["reviewed", "provisional"] },
+        "disposition": { "enum": ["affected", "no-impact"] },
+        "affectedPrimitives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "version", "scope"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+              "scope": { "enum": ["implementation", "catalog-contract", "release-contract"] }
+            }
+          }
+        },
+        "rationale": { "type": "string", "minLength": 20 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "disposition": { "const": "affected" } } },
+          "then": { "properties": { "affectedPrimitives": { "type": "array", "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "disposition": { "const": "no-impact" } } },
+          "then": { "properties": { "affectedPrimitives": { "type": "array", "maxItems": 0 } } }
+        }
+      ]
+    }
+  }
+}
