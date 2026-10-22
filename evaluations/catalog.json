@@ -2,7 +2,7 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "repository": "agentic-delivery-lab/agentic-delivery-primitives",
   "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
   "reportSchema": {
@@ -112,24 +112,24 @@
     },
     {
       "id": "content-digest-runner",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "runner",
       "path": "tools/primitive-content-digest.mjs",
-      "sha256": "92cf57cec93012017d1e3aa0e16aaea069e315ee6e43dc891036b74962646d33"
+      "sha256": "b613051233cdec168343225acd7c815520086da54cca72f6f36d41ac951bd7c6"
     },
     {
       "id": "candidate-branch-validator",
       "version": "0.1.0",
       "kind": "candidate",
       "path": "validators/repository-delivery/validate-branch-name.mjs",
-      "sha256": "ad70451f8065ee0c7a4ed678ef9c4bd260ca8baedb18be80fec093b9a323bf07"
+      "sha256": "5d880ea8fb1f594a642d78c403f2f4b24977a87eb5de4dddd2cc805dd08e4821"
     },
     {
       "id": "candidate-source-issue-validator",
       "version": "0.1.0",
       "kind": "candidate",
       "path": "validators/repository-delivery/validate-source-issue.mjs",
-      "sha256": "267becef78bc0c97ef766852a745f618c66bf4dfa60d1210c84fb2a45570715a"
+      "sha256": "e3828ce28c5c7fdd4a59c4c86abc491be1ae75a83f0a048b152487641fd2dcb7"
     },
     {
       "id": "candidate-capabilities-catalog",

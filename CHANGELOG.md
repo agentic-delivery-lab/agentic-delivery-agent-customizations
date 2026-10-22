@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Evaluation catalog `0.6.0` pins the accepted validator metadata and combined digest runner `1.1.0`. Replay rejects stale dependency hashes rather than silently executing changed artifacts. The four-case dataset and pinned baseline remain unchanged.
+
 - Offline replay now describes the actual candidate and baseline pass rates in its improvement-hypothesis rationale. A better or worse synthetic result cannot be described as equal, and no production hypothesis is inferred. Comparison regressions cover both metric directions; the updated runner is prepared as draft `0.1.0-draft.10`, with no release publication or runtime adoption.
 
 
