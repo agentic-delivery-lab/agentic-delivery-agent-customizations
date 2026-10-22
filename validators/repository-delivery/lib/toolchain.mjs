@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-// agentic-primitive: {"id":"toolchain-policy-validator","kind":"validator","enforcement":"deterministic","adrs":["ADR-0008"],"domains":["agentic-delivery-governance"]}
+// agentic-primitive: {"id":"toolchain-policy-validator","kind":"validator","enforcement":"deterministic","decisionIds":["ADR-0008"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0008"]}
 import { access, readFile, stat } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';

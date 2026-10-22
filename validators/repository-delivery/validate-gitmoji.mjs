@@ -1,4 +1,4 @@
-// agentic-primitive: {"id":"gitmoji-validator","kind":"validator","enforcement":"deterministic","adrs":["ADR-0005"],"domains":["agentic-delivery-governance"]}
+// agentic-primitive: {"id":"gitmoji-validator","kind":"validator","enforcement":"deterministic","decisionIds":["ADR-0005"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0005"]}
 
 import process from 'node:process';
 import path from 'node:path';

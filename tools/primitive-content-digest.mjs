@@ -7,26 +7,31 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const SHA = /^[0-9a-f]{40}$/;
 
-// These roots contain reusable primitives, offline evaluation evidence,
-// runtime pins, and the CI check that enforces their contracts. The
-// release manifest is deliberately excluded because including its digest
-// field would make the value self-referential.
+// These roots contain the canonical reusable capability source and its
+// machine-readable catalog. The release manifest is deliberately excluded:
+// its content digest describes this source tree and including the digest field
+// would make the value self-referential.
 const AUTHORITATIVE_ROOTS = [
+  '.github/CODEOWNERS',
+  '.github/workflows',
   'AGENTS.md',
   'README.md',
   'CHANGELOG.md',
   '.node-version',
-  '.github/workflows/primitives-quality.yml',
   'agents',
   'capabilities',
+  'docs/decisions',
   'evaluations',
   'hooks',
   'instructions',
   'mcp',
   'manifests/primitive-catalog.yml',
+  'manifests/decision-impact-review.json',
+  'references',
+  'schemas',
   'package.json',
   'pnpm-lock.yaml',
-  'schemas',
+  'scripts',
   'skills',
   'tools',
   'validators',
@@ -52,6 +57,10 @@ export async function primitiveFiles(root, revision = 'HEAD') {
 
 export async function primitiveContentDigest(root, revision = 'HEAD') {
   if (!SHA.test(revision) && revision !== 'HEAD') throw new Error('Primitive revision must be HEAD or a 40-character commit SHA');
+  if (revision !== 'HEAD') {
+    const objectType = (await git(root, ['cat-file', '-t', revision])).trim();
+    if (objectType !== 'commit') throw new Error('Primitive source revision must identify a commit object');
+  }
   const files = await primitiveFiles(root, revision);
   if (files.length === 0) throw new Error('Agentic Primitives contains no authoritative files at the requested revision');
   const hash = createHash('sha256');

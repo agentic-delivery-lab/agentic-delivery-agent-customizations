@@ -12,20 +12,13 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      ARCHITECTURE_REPORT_SCHEMA: architecture-contract/architecture/contracts/evaluation-report.schema.json
+      ARCHITECTURE_REPORT_SCHEMA: architecture-authority/architecture/contracts/evaluation-report.schema.json
+      ARCHITECTURE_AUTHORITY_ROOT: ${{ github.workspace }}/architecture-authority
     steps:
       - name: Check out primitives
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
-          persist-credentials: false
-      - name: Check out the pinned Architecture report contract
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-        with:
-          repository: agentic-delivery-lab/agentic-delivery-architecture
-          ref: 7b1d21462f70c411e75ae67ce80dcf688c9973e8
-          path: architecture-contract
-          fetch-depth: 1
           persist-credentials: false
       - name: Set up pnpm
         uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
@@ -35,8 +28,26 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .node-version
-      - name: Install locked dependencies
+      - name: Install Primitive validator dependencies
         run: pnpm install --frozen-lockfile
+      - name: Read pinned Architecture release-manifest commit
+        id: architecture-pin
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
+          import { readFile } from 'node:fs/promises';
+          const release = JSON.parse(await readFile('manifests/primitive-release.json', 'utf8'));
+          const commit = release.architecture?.releaseManifestCommit;
+          if (!/^[0-9a-f]{40}$/.test(commit ?? '')) throw new Error('Architecture release manifest commit must be an immutable SHA');
+          process.stdout.write(`manifestCommit=${commit}\n`);
+          NODE
+      - name: Check out pinned Architecture Authority
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          repository: agentic-delivery-lab/agentic-delivery-architecture
+          ref: ${{ steps.architecture-pin.outputs.manifestCommit }}
+          path: architecture-authority
+          fetch-depth: 0
+          persist-credentials: false
       - name: Validate primitive catalog
         run: pnpm primitive:check
       - name: Validate history-preserving extraction manifest

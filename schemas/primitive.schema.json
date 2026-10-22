@@ -1,18 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/blob/main/schemas/primitive.schema.json",
-  "title": "Agentic Primitive v1",
+  "title": "Agentic Primitive catalog entry v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "kind", "version", "path", "enforcement", "adrs", "domains"],
+  "required": ["id", "kind", "version", "path", "enforcement", "adrs", "decisionIds", "domains"],
   "properties": {
-    "schemaVersion": { "const": 1 },
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "kind": { "enum": ["agent", "skill", "instruction", "hook", "validator", "capability", "mcp-contract"] },
     "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
-    "path": { "type": "string", "pattern": "^(agents|skills|instructions|hooks|validators|capabilities|mcp/contracts)/" },
+    "path": { "type": "string", "pattern": "^(agents|skills|instructions|hooks|validators|capabilities|mcp/contracts|scripts)/" },
     "enforcement": { "enum": ["instructional", "deterministic", "semantic"] },
-    "adrs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
-    "domains": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+    "adrs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^ADR-[0-9]{4}$" } },
+    "decisionIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^(ADR|ADP|ADD)-[0-9]{4}$" } },
+    "domains": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }
   }
 }

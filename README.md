@@ -1,38 +1,45 @@
 # Agentic Primitives
 
-Agentic Primitives are reusable, versioned capabilities for the organization:
-agents, skills, instructions, hooks, deterministic validators, capability
-catalogs, and MCP/tool contracts.
+Agentic Primitives is the canonical source for reusable, versioned agents,
+skills, instructions, hooks, validators, capabilities, and MCP/tool contracts.
+The catalog and release manifests define each Primitive's path, version,
+decision references, and immutable source evidence.
 
 The architecture direction is one way:
+
+Offline evaluations under `evaluations/` use synthetic fixtures and deterministic
+graders over pinned validator blobs. A separate semantic rubric is manual-only.
+Replay uses an injected GitHub Actions API adapter, makes no live GitHub or
+model-service calls, and cannot write Issues, Projects or policy. Reports bind
+the exact Architecture schema bytes and candidate/baseline source commits.
+CI retains the schema-validated synthetic report for 14 days. This source
+integration does not admit evaluation tooling as a runtime capability or prove
+production improvement.
 
 ```text
 Architecture Authority -> Agentic Primitives -> approved distribution surfaces
                                        -> Delivery Control Plane selection
 ```
 
-The organization Copilot agents published from `.github-private/agents` are
-promoted projections from this repository unless a separate architecture
-decision explicitly scopes an organization-only agent to that private surface.
+Copilot agents published from `.github-private/agents` are promoted from
+`agents/copilot/` through the publication lock in the Distribution repository.
+The `adrs` metadata field remains the ADR-only projection consumed by existing
+Architecture and Distribution checks; `decisionIds` also records ADP and ADD
+decisions for complete release impact review.
 
-Offline evaluations are versioned under `evaluations/`. Their datasets contain
-synthetic fixtures, deterministic graders replay pinned validator blobs, and a
-separate semantic rubric is manual-only. Reports validate against the immutable
-Architecture Authority contract pin in the Primitive release manifest. Replay
-uses an injected synthetic GitHub Actions API adapter for source-Issue cases;
-it makes no live GitHub or model-service calls and cannot write Issues,
-Projects, or policy state. This draft evaluation mechanism is not adopted as
-a catalogued Primitive until Architecture Issue #11 is reviewed and merged
-and Primitive Issue #2 completes its ADR impact mapping.
-Pull-request CI retains the schema-validated synthetic report as a 14-day
-workflow artifact; missing report output fails the upload step.
-
-This local repository is a history-preserving extraction prepared for review;
-remote repository creation and organization publication remain operator steps.
+Architecture Authority is read from the exact release-manifest commit and
+source commit in `manifests/primitive-release.json`. The catalog validator
+checks that pin and the impact review before a release can advance. Publication
+to consumer surfaces remains a separate reviewed operation.
 
 ```text
-pnpm primitive:check
+pnpm install --frozen-lockfile
+ARCHITECTURE_AUTHORITY_ROOT=/path/to/agentic-delivery-architecture pnpm primitive:check
 pnpm migration:check
 pnpm evaluation:check
 pnpm test
 ```
+
+Set `ARCHITECTURE_AUTHORITY_ROOT` to a Git checkout containing the pinned
+Architecture commits when running the validator locally. CI checks out the
+release-manifest commit directly.

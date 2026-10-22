@@ -1,4 +1,4 @@
-// agentic-primitive: {"id":"pull-request-branch-validator","kind":"validator","enforcement":"deterministic","adrs":["ADR-0007"],"domains":["agentic-delivery-governance"]}
+// agentic-primitive: {"id":"pull-request-branch-validator","kind":"validator","enforcement":"deterministic","decisionIds":["ADR-0007"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0007"]}
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
