@@ -62,4 +62,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Run primitive tests
-        run: pnpm test
+        run: |
+          python3 -c 'import sys; assert sys.version_info >= (3, 12), "Workspace profile requires Python 3.12+"'
+          command -v findmnt
+          pnpm test

@@ -6,6 +6,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { promisify } from 'node:util';
 import { test } from 'node:test';
+import YAML from 'yaml';
 
 import { compareFixtureRates, replayEvaluation } from '../tools/replay-evaluation.mjs';
 
@@ -26,6 +27,12 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(first.report.contractVersion, '2.0.0');
   assert.equal(first.report.classification, 'synthetic');
   assert.equal(first.report.evaluationMode, 'offline');
+  const { stdout: capabilitiesSource } = await promisify(execFile)('git', [
+    'show', `${first.candidateCommit}:${first.report.subject.sourcePin.path}`,
+  ], { cwd: root });
+  const measuredCapability = YAML.parse(capabilitiesSource).capabilities.find(({ id }) => id === first.report.subject.id);
+  assert.ok(measuredCapability, 'The measured capability must exist in its exact source pin');
+  assert.equal(first.report.subject.version, measuredCapability.version);
   assert.equal(first.report.runStartedAt, runStartedAt);
   assert.equal(first.report.dataset.caseIds.length, 4);
   assert.equal(first.report.dataset.partition, 'synthetic');

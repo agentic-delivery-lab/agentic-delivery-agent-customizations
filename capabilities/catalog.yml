@@ -8,3 +8,7 @@ capabilities:
     version: 0.1.0
     primitiveIds: [architecture-decision, ubiquitous-language]
     deterministic: false
+  - id: local-workspace-coordination
+    version: 0.1.0
+    primitiveIds: [workspace-lifecycle-guard]
+    deterministic: true

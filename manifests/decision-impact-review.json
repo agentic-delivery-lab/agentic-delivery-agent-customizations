@@ -6,7 +6,7 @@
   "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "6a8c0e7c075578d7bc7ce83e08e16cb95f4f64229ba791e28f586f074ddf5c47"
+    "evidenceSha256": "883e5fd01762de981ca679dceb75962910e6565cc1baf91937189fcff3944e5a"
   },
   "decisions": [
     {
@@ -55,16 +55,21 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {
           "id": "commit-range-validator",
           "version": "0.1.0",
           "scope": "implementation"
+        },
+        {
+          "id": "workspace-lifecycle-guard",
+          "version": "0.1.0",
+          "scope": "implementation"
         }
       ],
-      "rationale": "The workflow prescribes trunk-based delivery and the commit-range validator checks its repository history boundary."
+      "rationale": "The workflow prescribes trunk-based delivery and the commit-range validator checks its repository history boundary. The local Linux workspace guard implements advisory ownership leases and conservative local cleanup observations; hosting authorization and installation remain caller responsibilities."
     },
     {
       "decisionId": "ADR-0005",
@@ -73,7 +78,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {
@@ -101,7 +106,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {
@@ -119,7 +124,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {
@@ -136,9 +141,14 @@
           "id": "source-issue-validator",
           "version": "0.1.0",
           "scope": "implementation"
+        },
+        {
+          "id": "workspace-lifecycle-guard",
+          "version": "0.1.0",
+          "scope": "implementation"
         }
       ],
-      "rationale": "The workflow and branch and source-issue validators implement issue-linked branch identity and delivery checks."
+      "rationale": "The workflow and branch and source-issue validators implement issue-linked branch identity and delivery checks. The local Linux workspace guard implements advisory ownership leases and conservative local cleanup observations; hosting authorization and installation remain caller responsibilities."
     },
     {
       "decisionId": "ADR-0008",
@@ -147,7 +157,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {

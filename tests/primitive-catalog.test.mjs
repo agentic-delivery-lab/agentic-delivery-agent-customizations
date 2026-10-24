@@ -23,7 +23,7 @@ test('every primitive has catalog, metadata, pinned Architecture, and impact cov
   skip: !process.env.ARCHITECTURE_AUTHORITY_ROOT,
 }, async () => {
   assert.deepEqual(await validatePrimitiveCatalog(root), {
-    primitives: 15,
+    primitives: 16,
     decisions: 23,
     noImpact: 4,
     provisional: 4,
@@ -283,7 +283,7 @@ test('extracted skills resolve architecture context through an immutable release
 test('draft release pins exact Architecture manifest and source artifacts', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.0-draft.13');
+  assert.equal(release.version, '0.1.0-draft.14');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
   assert.equal(release.architecture.version, '0.1.0-draft.24');
   assert.equal(release.architecture.releaseManifestCommit, '61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c');

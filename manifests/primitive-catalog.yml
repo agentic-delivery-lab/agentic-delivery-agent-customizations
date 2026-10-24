@@ -20,11 +20,19 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: delivery-workflow
     kind: skill
-    version: 0.1.0
+    version: 0.2.0
     path: skills/delivery-workflow/SKILL.md
     enforcement: instructional
     adrs: [ADR-0004, ADR-0005, ADR-0006, ADR-0007, ADR-0008]
     decisionIds: [ADR-0004, ADR-0005, ADR-0006, ADR-0007, ADR-0008]
+    domains: [agentic-delivery-governance]
+  - id: workspace-lifecycle-guard
+    kind: validator
+    version: 0.1.0
+    path: validators/workspace-lifecycle/workspace_guard.py
+    enforcement: deterministic
+    adrs: [ADR-0004, ADR-0007]
+    decisionIds: [ADR-0004, ADR-0007]
     domains: [agentic-delivery-governance]
   - id: plain-language-communication
     kind: skill
