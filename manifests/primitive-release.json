@@ -1,19 +1,19 @@
 {
   "$schema": "../schemas/primitive-release.schema.json",
   "schemaVersion": 1,
-  "releaseId": "urn:agentic-delivery:primitive-release:0.1.0-draft.14",
-  "version": "0.1.0-draft.14",
+  "releaseId": "urn:agentic-delivery:primitive-release:0.1.0-draft.15",
+  "version": "0.1.0-draft.15",
   "status": "draft",
   "architecture": {
     "id": "urn:agentic-delivery:architecture:authority",
-    "version": "0.1.0-draft.24",
-    "releaseManifestCommit": "61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c",
-    "releaseManifestSha256": "7ffb17661195fcc224b3fdd493e6a68233dcaee4400eae7cc0dd0a97ef4fba69",
-    "sourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
+    "version": "0.1.0-draft.77",
+    "releaseManifestCommit": "6392c3770219304a78393faac42276e12eb1525f",
+    "releaseManifestSha256": "703c0db4b815b529f8b0956b264ffad29e2c065d1b6d6da1f34e354ae0dacb6f",
+    "sourceCommit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
     "decisionInventoryPath": "architecture/references/decision-inventory.yml",
-    "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
+    "decisionInventorySha256": "9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b"
   },
-  "sourceCommit": "5cbdcea76fc87743211eeaacda10d54b4f66d4a3",
-  "contentSha256": "33d8960b823fdfbc2f9ac9176a48fd08cb7f3966d646e24e726a36d0ee132226",
+  "sourceCommit": "e26d3ac872aa1efbf1d567917f1de043895ef4cc",
+  "contentSha256": "4b6c07deb6f7be8f495244e3c50a528054528db1fdec5a5a14ea4cfdda5bb34e",
   "capabilityPolicyVersion": "0.1.0"
 }
