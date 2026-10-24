@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- A local Linux workspace guard coordinates managed sessions through shared/exclusive OS leases and preserves uncertain work during cleanup admission. Real Git/process regressions cover hidden changes, inherited leases, active readers and unsupported profiles. Distribution installation and Control Plane integration remain required before claiming managed enforcement.
+
 ### Fixed
 
 - Pin deterministic evaluation metadata to the grader definition and record the replay runner separately. Local replay honors the documented Architecture root while retaining exact schema-digest checks. Verify prepared-source ancestry and preserve it through merge-commit integration.

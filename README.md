@@ -16,6 +16,14 @@ CI retains the schema-validated synthetic report for 14 days. This source
 integration does not admit evaluation tooling as a runtime capability or prove
 production improvement.
 
+The [workspace lifecycle guard](validators/workspace-lifecycle/README.md)
+provides shared/exclusive ownership leases, read-only Git inventory and local
+cleanup observations for a private-account Linux profile. It uses stock Git
+and OS interfaces. Fresh hosting authorization, installation and caller
+integration remain separate; a catalog entry grants no execution permission.
+On Linux, `pnpm test` also runs its real Git/process tests using Python 3.12+
+and util-linux `findmnt`. Other platforms explicitly skip that profile's tests.
+
 ```text
 Architecture Authority -> Agentic Primitives -> approved distribution surfaces
                                        -> Delivery Control Plane selection

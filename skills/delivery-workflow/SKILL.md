@@ -43,6 +43,40 @@ Do not claim live enforcement from the JSON file alone.
 
 The branch starter rejects a closed, missing or unreadable source issue and rejects a pull request number even when it is open. Use `pnpm lint:branch <branch-name>` for a candidate that already exists. CI repeats the branch syntax and open-issue checks when an internal pull request is opened or updated. A raw Git branch command can bypass the local helper, but it cannot pass the pull-request check with an invalid name or source issue.
 
+## Coordinate workspace ownership
+
+Follow the workspace lifecycle in the pinned ADR-0004 and filesystem projection
+in ADR-0007. The [workspace guard](../../validators/workspace-lifecycle/README.md)
+implements a local Linux profile for admitted managed callers. Its catalog
+entry does not grant execution permission or establish installation.
+
+- Inventory the primary checkout, every registered worktree, refs, stashes and
+  unknown files before starting or recovering work. Prefer a clean primary for
+  sequential work. Preserve dirty or unknown-owned work; do not create another
+  checkout to escape it.
+- A managed caller holds the shared common-Git ownership lease throughout use.
+  Create isolated task checkouts only in the canonical sibling container and
+  use an owner-identified native worktree lock. Verify actual child descriptor
+  inheritance and settle owned processes before ending the lease; stock Codex
+  does not establish this protocol automatically.
+- Before disposal, end the shared scope, acquire an exclusive lease and repeat
+  discovery. A missing lease, unknown consumer, unreadable worktree, changed
+  tip, dirty/ignored artifact or unsupported profile holds the affected action.
+  Never delete or replace the common lease file, force removal, unlock another
+  owner, or reset/clean unknown work.
+- Obtain fresh canonical hosting identity, open-PR and active-run observations.
+  Preserve unique commits before fetching/pruning; compare the exact task tip
+  with the current fetched default. Hold the exclusive lease through final
+  checks and normal Git removal, and use an expected-tip guard for remote
+  deletion. PR closure and branch age do not prove integration.
+- On completion, report removed items, active work and preservation reasons.
+  An uncertain shutdown requires recovery evidence before disposal.
+
+The guard's local observation has `hostingAuthorized: false`; it performs no
+GitHub mutation or removal. Distribution installation and Control Plane caller
+integration remain separate evidence requirements. Unsupported platforms keep
+the managed mutation path disabled and require the explicit manual procedure.
+
 ## Write commit and pull-request titles
 
 Use the Conventional Commits grammar with the type first:

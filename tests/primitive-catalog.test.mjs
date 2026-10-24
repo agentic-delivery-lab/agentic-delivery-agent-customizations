@@ -23,7 +23,7 @@ test('every primitive has catalog, metadata, pinned Architecture, and impact cov
   skip: !process.env.ARCHITECTURE_AUTHORITY_ROOT,
 }, async () => {
   assert.deepEqual(await validatePrimitiveCatalog(root), {
-    primitives: 15,
+    primitives: 16,
     decisions: 23,
     noImpact: 4,
     provisional: 4,
