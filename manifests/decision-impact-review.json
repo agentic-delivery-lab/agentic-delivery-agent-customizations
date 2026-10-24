@@ -1,12 +1,12 @@
 {
   "$schema": "../schemas/primitive-impact-review.schema.json",
   "schemaVersion": 1,
-  "architectureVersion": "0.1.0-draft.24",
-  "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
-  "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592",
+  "architectureVersion": "0.1.0-draft.77",
+  "architectureSourceCommit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
+  "decisionInventorySha256": "9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "883e5fd01762de981ca679dceb75962910e6565cc1baf91937189fcff3944e5a"
+    "evidenceSha256": "3e4bf33a4b08d71224d50a5138ecdb5e91820fbf1eeb964f1b72c8ef20bd61ad"
   },
   "decisions": [
     {
@@ -175,11 +175,11 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "The delivery agent follows the source-issue, task-budget, and continuation boundary implemented by this decision."
+      "rationale": "The automated delivery role follows the admitted controller operation allowance and durable continuation boundary. Subscription protection is additional; the instruction grants no unlimited window or unsupported native tool/transport guarantee."
     },
     {
       "decisionId": "ADR-0011",
@@ -195,7 +195,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
@@ -221,7 +221,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
@@ -247,7 +247,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
@@ -262,9 +262,14 @@
           "id": "primitive-catalog-validator",
           "version": "0.1.0",
           "scope": "release-contract"
+        },
+        {
+          "id": "codex-delivery",
+          "version": "0.2.0",
+          "scope": "implementation"
         }
       ],
-      "rationale": "The catalog validator verifies immutable Primitive and Architecture release references and the source content digest."
+      "rationale": "The catalog validator checks immutable release provenance. The automated delivery role explicitly excludes runner inheritance of the interactive W02 delegation, owner credentials, approval, merge and activation authority."
     },
     {
       "decisionId": "ADR-0019",
@@ -333,11 +338,24 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "The proposed Projects-led planning context could affect how this agent consumes source-Issue planning facts; no Project authority is claimed."
+      "rationale": "The delivery role keeps Project planning input separate from source-Issue execution authorization. This draft impact review retains the inventory proposed-origin classification without claiming runtime adoption."
+    },
+    {
+      "decisionId": "ADR-0024",
+      "reviewStatus": "provisional",
+      "disposition": "affected",
+      "affectedPrimitives": [
+        {
+          "id": "codex-delivery",
+          "version": "0.2.0",
+          "scope": "implementation"
+        }
+      ],
+      "rationale": "The role consumes only controller-admitted approved Requirements references applicable to the native origin repository, holding missing or uncertain authority. It does not own normative requirements or implement controller context admission. Proposed-origin provenance and draft release limits remain explicit."
     }
   ]
 }

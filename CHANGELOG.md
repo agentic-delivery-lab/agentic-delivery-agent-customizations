@@ -21,6 +21,8 @@
 
 ### Changed
 
+- Prepare a draft Architecture `0.1.0-draft.77` compatibility update with all 24 decision mappings. Delivery role `0.2.0` follows the controller's operation allowance, approved Requirements references and automated-runner authority exclusions. Evaluation catalog `0.7.0` and runner `0.5.0` use the current Customizations name for candidates while retaining immutable historical baseline pins. No runtime context or participant is activated.
+
 - Draft `0.1.0-draft.12` combines the accepted catalog/impact validation with offline evaluation replay. It preserves exact Architecture schema and inventory pins; source and content identity are rebound before acceptance. No runtime capability or release is activated.
 
 - Proposed Primitive draft `0.1.0-draft.9` pins reviewed source `035547fc1c7885e96cf9a8f8295c94a26f269847`, including source-bound review evidence, commit-object validation and complete metadata discovery. CI rejects a proposed release that omits current authoritative content. Earlier draft artifacts remain unchanged; no release or runtime consumer is activated.

@@ -2,12 +2,12 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.6.2",
-  "repository": "agentic-delivery-lab/agentic-delivery-primitives",
-  "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3",
+  "version": "0.7.0",
+  "repository": "agentic-delivery-lab/agentic-delivery-agent-customizations",
+  "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-agent-customizations/issues/3",
   "reportSchema": {
     "repository": "agentic-delivery-lab/agentic-delivery-architecture",
-    "commit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
+    "commit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
     "path": "architecture/contracts/evaluation-report.schema.json",
     "sha256": "02ae624c21234bb7494dfc3308fe5cd54c112909e215192e2a07307651ebf55d"
   },
@@ -49,10 +49,10 @@
     },
     {
       "id": "evaluation-catalog-schema",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "contract",
       "path": "evaluations/contracts/evaluation-catalog.schema.json",
-      "sha256": "cf73789d96ed8fd54bc5159bed247dbdb3f351182ddc9d61f6dd84cff31485c7"
+      "sha256": "cbc1cad51dcab79f77c325600e81bffded77a640baa7ccba49434107fd0bde36"
     },
     {
       "id": "selection-policy-schema",
@@ -105,10 +105,10 @@
     },
     {
       "id": "replay-runner",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "kind": "runner",
       "path": "tools/replay-evaluation.mjs",
-      "sha256": "2e23f2921ed1c29f443c931e72ad6d7ac0079172e116b555f1b9a341629726ff"
+      "sha256": "eeba92491deac1397c67d6a911440eb8f1dcffc890e90a3f8060775da5c6b8cb"
     },
     {
       "id": "content-digest-runner",

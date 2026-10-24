@@ -6,22 +6,22 @@
     "type": "independent-agent-review",
     "independentOf": "implementation-author"
   },
-  "reviewedAt": "2026-10-24T05:45:31Z",
+  "reviewedAt": "2026-10-24T06:46:10Z",
   "reviewScope": "decision-to-primitive-impact",
   "target": {
-    "primitiveCatalogSha256": "e22ca7bd32f75f510c91a49984e01084bf231c1caa5dea9827761a86a93935cd",
-    "primitiveSourcesSha256": "1c076c55b2bd580b080da150885ba15e2f9facd10aa82226134051441223f5c2",
-    "decisionSetSha256": "baa14c2db12eb909f6400898bf47fcfdf8dd97dded0076cfe52d299b4bae16e6",
-    "architectureReleaseManifestCommit": "61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c",
-    "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
-    "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
+    "primitiveCatalogSha256": "e623cad93e9f62087d85af434ff8fd63aa1428dcfabf5a4972304a03586ecb56",
+    "primitiveSourcesSha256": "3f378427ed764ae38c0c789bb1571c367fb96bd095c4219b0eba827bd220cb1e",
+    "decisionSetSha256": "fcb9e77287e6106e4030317b8d79f315831d73282dd7a657c9903fb91d200eea",
+    "architectureReleaseManifestCommit": "6392c3770219304a78393faac42276e12eb1525f",
+    "architectureSourceCommit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
+    "decisionInventorySha256": "9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b"
   },
   "outcome": "no-blocking-mapping-findings",
-  "summary": "Separate read-only AI review /root/review_pr4 found no blocking mapping findings for all 23 pinned decisions and 16 primitives, including the workspace guard and delivery-workflow 0.2.0 under ADR-0004/0007. The corrected source also preserves own-process readers, unknown directory traversal and active bisect state. All affected, no-impact and provisional mappings retain their existing ownership. This review does not establish runtime admission or human approval.",
+  "summary": "Separate read-only AI review /root/review_pr4 found no blocking mappings for all 24 pinned decisions and 16 primitives. Delivery role 0.2.0 implements the instructional W08 allowance, W02 runner exclusions and ADR-0024 admitted Requirements-reference boundaries. Current candidate evaluation references use the verified Customizations name; immutable historical baseline references remain unchanged. No runtime admission or human approval is established.",
   "limitations": [
     "This evidence records an independent AI review; it does not replace human approval or adopt proposed Architecture decisions.",
     "Hashes bind the review to exact artifacts but cannot prove the semantic reasoning or make a judgment objectively true.",
-    "The pinned draft.24 Architecture inventory remains authoritative for this candidate; current Architecture compatibility is separate W15 work. Proposed-origin decisions remain provisional and no release is activated."
+    "Selected Architecture draft.77 is not an approved runtime context. This draft candidate preserves five proposed-origin impact rows and all released-artifact admission gates."
   ],
   "findings": [
     {

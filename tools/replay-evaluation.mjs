@@ -14,7 +14,8 @@ import { primitiveContentDigest } from './primitive-content-digest.mjs';
 const execFileAsync = promisify(execFile);
 const rootDefault = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ARCHITECTURE_REPOSITORY = 'agentic-delivery-lab/agentic-delivery-architecture';
-const PRIMITIVES_REPOSITORY = 'agentic-delivery-lab/agentic-delivery-primitives';
+const CUSTOMIZATIONS_REPOSITORY = 'agentic-delivery-lab/agentic-delivery-agent-customizations';
+const HISTORICAL_BASELINE_REPOSITORY = 'agentic-delivery-lab/agentic-delivery-primitives';
 const SHA = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 
@@ -261,7 +262,7 @@ export async function replayEvaluation({
     throw new Error(`Evaluation catalog must identify its pinned schema at ${contracts['evaluation-catalog-schema']}`);
   }
 
-  if (catalog.repository !== PRIMITIVES_REPOSITORY) throw new Error('Evaluation catalog repository does not match this Primitive repository.');
+  if (catalog.repository !== CUSTOMIZATIONS_REPOSITORY) throw new Error('Evaluation catalog repository does not match this Primitive repository.');
   if (catalog.reportSchema.repository !== ARCHITECTURE_REPOSITORY) throw new Error('Report schema pin is not owned by Architecture Authority.');
   if (catalog.reportSchema.commit !== release.architecture.sourceCommit) throw new Error('Report schema commit must match the Primitive release Architecture pin.');
 
@@ -316,7 +317,7 @@ export async function replayEvaluation({
   if (baseline.sourceCommit !== 'e4933566fbf5b0f593830f8933f18fbd21024fa7') {
     throw new Error('The current evaluation baseline must remain pinned to the immutable Primitives main snapshot.');
   }
-  if (baseline.sourcePins.some((pin) => pin.commit !== baseline.sourceCommit || pin.repository !== PRIMITIVES_REPOSITORY)) {
+  if (baseline.sourcePins.some((pin) => pin.commit !== baseline.sourceCommit || pin.repository !== HISTORICAL_BASELINE_REPOSITORY)) {
     throw new Error('Every baseline validator pin must use the baseline source commit and Primitives repository.');
   }
   const datasetCaseIds = dataset.cases.map(({ id }) => id);
@@ -367,7 +368,7 @@ export async function replayEvaluation({
   if (!reportSchemaVersion) throw new Error('Pinned Architecture report schema has no contract version.');
 
   const datasetArtifact = artifact(catalog, 'evaluation-dataset');
-  const datasetUrl = githubBlob(PRIMITIVES_REPOSITORY, candidateCommit, datasetArtifact.path);
+  const datasetUrl = githubBlob(CUSTOMIZATIONS_REPOSITORY, candidateCommit, datasetArtifact.path);
   const candidateChecks = [];
   const baselineChecks = [];
   for (const fixture of dataset.cases) {
@@ -402,7 +403,7 @@ export async function replayEvaluation({
 
   const pinFor = (id) => {
     const item = artifact(catalog, id);
-    return sourcePin(PRIMITIVES_REPOSITORY, candidateCommit, item.path, item.sha256);
+    return sourcePin(CUSTOMIZATIONS_REPOSITORY, candidateCommit, item.path, item.sha256);
   };
   const baselinePinFor = (pin) => sourcePin(pin.repository, pin.commit, pin.path, pin.sha256);
   const baselineArtifact = artifact(catalog, 'synthetic-baseline');
@@ -412,7 +413,7 @@ export async function replayEvaluation({
   const candidateMeasurement = measurement(comparator.metricId, candidateRate, comparator.unit, reportGeneratedAt, datasetUrl);
   const reportSchemaUrl = `https://github.com/${catalog.reportSchema.repository}/blob/${catalog.reportSchema.commit}/${catalog.reportSchema.path}`;
   const subjectArtifact = artifact(catalog, 'candidate-capabilities-catalog');
-  const selectionPolicyUrl = githubBlob(PRIMITIVES_REPOSITORY, candidateCommit, artifact(catalog, 'dataset-selection-policy').path);
+  const selectionPolicyUrl = githubBlob(CUSTOMIZATIONS_REPOSITORY, candidateCommit, artifact(catalog, 'dataset-selection-policy').path);
   const reportCases = dataset.cases.map((fixture, index) => {
     const checkResult = candidateChecks[index];
     return {
@@ -471,7 +472,7 @@ export async function replayEvaluation({
       {
         id: 'evaluation-catalog',
         version: catalog.version,
-        sourcePin: sourcePin(PRIMITIVES_REPOSITORY, candidateCommit, 'evaluations/catalog.json', catalogDigest),
+        sourcePin: sourcePin(CUSTOMIZATIONS_REPOSITORY, candidateCommit, 'evaluations/catalog.json', catalogDigest),
       },
       {
         id: 'replay-runner',
@@ -496,8 +497,8 @@ export async function replayEvaluation({
       ...baseline.sourcePins.map((pin) => ({ id: pin.id, version: pin.version, sourcePin: baselinePinFor(pin) })),
     ],
     graders: {
-      deterministic: pinnedDefinition(catalog, 'deterministic-grader', PRIMITIVES_REPOSITORY, candidateCommit, grader),
-      semantic: pinnedDefinition(catalog, 'semantic-rubric', PRIMITIVES_REPOSITORY, candidateCommit, semanticRubric),
+      deterministic: pinnedDefinition(catalog, 'deterministic-grader', CUSTOMIZATIONS_REPOSITORY, candidateCommit, grader),
+      semantic: pinnedDefinition(catalog, 'semantic-rubric', CUSTOMIZATIONS_REPOSITORY, candidateCommit, semanticRubric),
     },
     results: {
       deterministicChecks: candidateChecks,
@@ -505,7 +506,7 @@ export async function replayEvaluation({
     },
     baseline: {
       status: 'measured',
-      definitionPin: sourcePin(PRIMITIVES_REPOSITORY, candidateCommit, baselineArtifact.path, baselineArtifact.sha256),
+      definitionPin: sourcePin(CUSTOMIZATIONS_REPOSITORY, candidateCommit, baselineArtifact.path, baselineArtifact.sha256),
       measurement: baselineMeasurement,
     },
     comparison: {
@@ -513,7 +514,7 @@ export async function replayEvaluation({
       comparator: {
         id: comparator.id,
         version: comparator.version,
-        sourcePin: sourcePin(PRIMITIVES_REPOSITORY, candidateCommit, comparatorArtifact.path, comparatorArtifact.sha256),
+        sourcePin: sourcePin(CUSTOMIZATIONS_REPOSITORY, candidateCommit, comparatorArtifact.path, comparatorArtifact.sha256),
         method: comparator.method,
         direction: comparator.direction,
       },
@@ -536,10 +537,10 @@ export async function replayEvaluation({
     },
     regressionAssessment: comparison.regressionAssessment,
     evidence: [
-      { kind: 'source', ref: githubBlob(PRIMITIVES_REPOSITORY, candidateCommit, subjectArtifact.path) },
+      { kind: 'source', ref: githubBlob(CUSTOMIZATIONS_REPOSITORY, candidateCommit, subjectArtifact.path) },
       { kind: 'dataset', ref: datasetUrl },
-      { kind: 'result', ref: githubCommit(PRIMITIVES_REPOSITORY, candidateCommit) },
-      { kind: 'baseline', ref: githubCommit(PRIMITIVES_REPOSITORY, baseline.sourceCommit) },
+      { kind: 'result', ref: githubCommit(CUSTOMIZATIONS_REPOSITORY, candidateCommit) },
+      { kind: 'baseline', ref: githubCommit(HISTORICAL_BASELINE_REPOSITORY, baseline.sourceCommit) },
       { kind: 'review', ref: catalog.ownerIssue },
       { kind: 'source', ref: reportSchemaUrl },
     ],
