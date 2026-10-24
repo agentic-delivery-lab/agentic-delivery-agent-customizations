@@ -1,5 +1,6 @@
 import importlib.util
 import ctypes
+import mmap
 import json
 import os
 import pathlib
@@ -94,11 +95,12 @@ class WorkspaceGuardTests(unittest.TestCase):
                  'staged': 'DIRTY_WORKSPACE', 'untracked': 'DIRTY_WORKSPACE', 'ignored': 'UNOWNED_IGNORED_ARTIFACTS',
                  'unknown-owner': 'UNKNOWN_WORKTREE_OWNER', 'changed-tip': 'CHANGED_TIP',
                  'changed-default': 'CHANGED_REMOTE_DEFAULT', 'active': 'ACTIVE_CONSUMERS',
-                 'missing-remote': 'REMOTE_NOT_VERIFIED', 'primary': 'PRIMARY_WORKTREE_PRESERVED'}
+                 'missing-remote': 'REMOTE_NOT_VERIFIED', 'primary': 'PRIMARY_WORKTREE_PRESERVED',
+                 'self-active': 'ACTIVE_CONSUMERS', 'bisect': 'DIRTY_WORKSPACE'}
         for name, expected in cases.items():
             with self.subTest(name=name):
                 primary, worktree, branch, tip, default = self.merged_task(name, merged=name != 'unmerged')
-                child = None
+                child = reader = None
                 if name in ('dirty', 'staged'):
                     (worktree / 'README.md').write_text('preserve edits\n')
                     if name == 'staged': self.git(worktree, 'add', 'README.md')
@@ -114,6 +116,9 @@ class WorkspaceGuardTests(unittest.TestCase):
                     self.git(worktree, 'add', '.'); self.git(worktree, 'commit', '-qm', 'Synthetic changed tip')
                 if name == 'changed-default': self.git(primary, 'update-ref', 'refs/remotes/origin/main', f'{default}^')
                 if name == 'missing-remote': self.git(primary, 'update-ref', '-d', 'refs/remotes/origin/main')
+                if name == 'self-active': reader = (worktree / 'README.md').open('rb')
+                if name == 'bisect':
+                    self.git(worktree, 'bisect', 'start', '--no-checkout', tip, f'{tip}^')
                 if name == 'active':
                     child = subprocess.Popen([sys.executable, '-c', 'import sys;print("ready",flush=True);sys.stdin.buffer.read(1)'],
                                              cwd=worktree, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -131,6 +136,60 @@ class WorkspaceGuardTests(unittest.TestCase):
                     self.assertTrue(self.git(primary, 'show-ref', '--verify', f'refs/heads/{branch}'))
                 finally:
                     if child is not None: child.communicate(b'x', timeout=5)
+                    if reader is not None: reader.close()
+
+    def test_consumer_probe_includes_its_own_open_workspace_references(self):
+        held = self.root / 'own-reader.txt'
+        held.write_bytes(b'preserve invoking controller reference')
+        with held.open('rb') as reader, mmap.mmap(reader.fileno(), 0, access=mmap.ACCESS_READ) as mapping:
+            result = guard.consumer_probe([self.root], service_monitors=self.service_monitors())
+            self.assertTrue(any(row['pid'] == os.getpid() and row['kind'] == 'fd'
+                                and row['path'] == str(held) for row in result['consumers']))
+            self.assertTrue(any(row['pid'] == os.getpid() and row['kind'] == 'mapping'
+                                and row['path'] == str(held) for row in result['consumers']))
+            self.assertEqual(mapping[:], b'preserve invoking controller reference')
+            self.assertFalse(result['clear'])
+        self.assertEqual(held.read_bytes(), b'preserve invoking controller reference')
+
+    def test_only_exact_live_cleanup_lease_descriptor_is_exempt(self):
+        with guard.WorkspaceLease(self.root, 'use', 'fixture-task') as lease:
+            with self.assertRaises(guard.WorkspaceHold) as caught:
+                guard.consumer_probe([self.root], own_lease=lease)
+            self.assertEqual(caught.exception.reason, 'EXCLUSIVE_LEASE_REQUIRED')
+        with guard.WorkspaceLease(self.root, 'cleanup', 'fixture-task') as lease:
+            request = dict(service_monitors=self.service_monitors(), own_lease=lease)
+            self.assertTrue(guard.consumer_probe([self.root], **request)['clear'])
+            duplicate = os.dup(lease.fd)
+            try:
+                result = guard.consumer_probe([self.root], **request)
+                self.assertFalse(result['clear'])
+                self.assertTrue(any(row['pid'] == os.getpid() and row['kind'] == 'fd'
+                                    and row['path'] == str(self.lock) for row in result['consumers']))
+            finally:
+                os.close(duplicate)
+
+    @unittest.skipIf(os.geteuid() == 0, 'Permission-denial fixture requires a non-root account')
+    def test_unreadable_untracked_directory_is_unknown_and_preserved(self):
+        primary, worktree, branch, tip, default = self.merged_task('unreadable-directory')
+        directory = worktree / 'unreadable'
+        directory.mkdir(); hidden = directory / 'unknown.txt'; hidden.write_text('preserve unknown work')
+        directory.chmod(0)
+        try:
+            observed = subprocess.run(['git', '-C', str(worktree), 'ls-files', '--others', '--exclude-standard', '-z'],
+                                      capture_output=True, check=True)
+            self.assertEqual(observed.stdout, b'')
+            self.assertIn(b'Permission denied', observed.stderr)
+            inventory = guard.read_inventory(primary)
+            self.assertEqual(inventory['worktrees'][1]['inspection'], 'unavailable')
+            with guard.WorkspaceLease(primary, 'cleanup', 'fixture-task') as lease:
+                with self.assertRaises(guard.WorkspaceHold) as caught:
+                    guard.local_cleanup_admission(lease, branch=branch, expected_tip=tip,
+                                                  expected_default_tip=default, worktree=worktree,
+                                                  service_monitors=self.service_monitors())
+                self.assertEqual(caught.exception.reason, 'UNKNOWN_WORKTREE')
+        finally:
+            directory.chmod(0o700)
+        self.assertEqual(hidden.read_text(), 'preserve unknown work')
 
     def test_inventory_preserves_nul_delimited_paths_and_lock_reasons_without_mutation(self):
         primary, worktree, branch = self.task('path with space')

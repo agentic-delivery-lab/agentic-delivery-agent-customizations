@@ -36,7 +36,7 @@ def command(argv, *, input_data=None):
     env.update(GIT_OPTIONAL_LOCKS='0', GIT_TERMINAL_PROMPT='0', LC_ALL='C')
     try:
         result = subprocess.run(argv, env=env, input=input_data, capture_output=True, timeout=15)
-        if result.returncode or len(result.stdout) + len(result.stderr) > 8 * 1024 * 1024:
+        if result.returncode or result.stderr or len(result.stdout) > 8 * 1024 * 1024:
             raise WorkspaceHold('INSPECTION_UNAVAILABLE', f'Bounded inspection failed: {argv[0]}')
         return result.stdout
     except (OSError, subprocess.TimeoutExpired) as error:
@@ -99,7 +99,7 @@ def read_inventory(repository):
                         if error.reason != 'DIRTY_WORKSPACE': raise
                         row['changes'].append(str(error))
                 directory = pathlib.Path(os.fsdecode(git(location, 'rev-parse', '--absolute-git-dir').removesuffix(b'\n')))
-                row['operations'] = [name for name in ('MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-apply', 'rebase-merge', 'sequencer', 'index.lock')
+                row['operations'] = [name for name in ('MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'BISECT_START', 'rebase-apply', 'rebase-merge', 'sequencer', 'index.lock')
                                      if os.path.lexists(directory / name)]
                 row['inspection'] = 'inspected'
             except WorkspaceHold as error:
@@ -217,7 +217,7 @@ def verify_tracked_bytes(repository):
         raise WorkspaceHold('DIRTY_WORKSPACE', 'Tracked index changed during verification')
 
 
-def _task_references(task, roots, primary, inspect_mappings):
+def _task_references(task, roots, primary, inspect_mappings, own_lease):
     references = []
     for kind, link in [('cwd', task / 'cwd'), ('exe', task / 'exe')] + [('fd', item) for item in (task / 'fd').iterdir()]:
         try:
@@ -226,6 +226,10 @@ def _task_references(task, roots, primary, inspect_mappings):
             continue
         if kind == 'cwd' and primary is not None and (target == primary or target.startswith(primary + '/')):
             continue  # The invoking owner's primary is retained, including its threads.
+        if kind == 'fd' and own_lease is not None and link.name == str(own_lease.fd) and target == str(own_lease.path):
+            current, held = link.stat(), os.fstat(own_lease.fd)
+            if (current.st_dev, current.st_ino) == (held.st_dev, held.st_ino):
+                continue  # Only this exact protocol descriptor is exempt, not the invoking process.
         if _reference_hits(target, roots):
             references.append({'kind': kind, 'path': target})
     if not inspect_mappings:
@@ -243,9 +247,13 @@ def _task_references(task, roots, primary, inspect_mappings):
     return references, bool(data)
 
 
-def consumer_probe(paths, *, service_monitors=(), owner_primary=None):
+def consumer_probe(paths, *, service_monitors=(), owner_primary=None, own_lease=None):
     """Observe same-account consumers. Exceptions require exact, caller-admitted host identities."""
     require_linux_profile()
+    if own_lease is not None:
+        if not isinstance(own_lease, WorkspaceLease) or own_lease._held_mode != 'cleanup':
+            raise WorkspaceHold('EXCLUSIVE_LEASE_REQUIRED', 'Only a live cleanup lease descriptor may be exempted')
+        own_lease.assert_current()
     roots = [str(pathlib.Path(path).resolve()) for path in paths]
     if any(not private_account_path(pathlib.Path(root)) for root in roots):
         raise WorkspaceHold('UNSUPPORTED_WORKSPACE_PROFILE', 'Consumer coverage requires account-private paths')
@@ -268,7 +276,7 @@ def consumer_probe(paths, *, service_monitors=(), owner_primary=None):
     for process in pathlib.Path('/proc').iterdir():
         if time.monotonic() >= deadline:
             raise WorkspaceHold('UNCERTAIN_CONSUMERS', 'Process inventory exceeded the supported profile bound')
-        if not process.name.isdigit() or int(process.name) == os.getpid():
+        if not process.name.isdigit():
             continue
         identity = None
         try:
@@ -283,7 +291,8 @@ def consumer_probe(paths, *, service_monitors=(), owner_primary=None):
                 try:
                     task_identity = _process_identity(task)
                     retained_primary = primary if lineage.get(identity['pid']) == identity['startTicks'] else None
-                    references, mappings_observed = _task_references(task, roots, retained_primary, not mappings_observed)
+                    references, mappings_observed = _task_references(task, roots, retained_primary, not mappings_observed,
+                                                                   own_lease if identity['pid'] == os.getpid() else None)
                     # Linux thread groups share CLONE_VM. Read one available map;
                     # an exited leader's empty map must not hide a live worker.
                     for reference in references:
@@ -311,6 +320,7 @@ def consumer_probe(paths, *, service_monitors=(), owner_primary=None):
                 verified.append(identity['pid'])
             else:
                 unknown.append(int(process.name))
+    if own_lease is not None: own_lease.assert_current()
     return {'schemaVersion': 1, 'clear': not consumers and not unknown, 'consumers': consumers,
             'unknownProcesses': sorted(set(unknown)), 'verifiedServiceMonitors': sorted(verified)}
 
@@ -373,7 +383,7 @@ def local_cleanup_admission(lease, *, branch, expected_tip, expected_default_tip
     elif attached:
         raise WorkspaceHold('WORKTREE_ATTACHED', 'A task branch checked out in any worktree cannot be deleted')
     probe = consumer_probe([lease.common, *[row['path'] for row in inventory['worktrees']]],
-                           service_monitors=service_monitors, owner_primary=primary)
+                           service_monitors=service_monitors, owner_primary=primary, own_lease=lease)
     if not probe['clear']:
         raise WorkspaceHold('ACTIVE_CONSUMERS' if probe['consumers'] else 'UNCERTAIN_CONSUMERS', 'Active or uninspectable consumers block disposal')
     lease.assert_current()

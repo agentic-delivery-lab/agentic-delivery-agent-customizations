@@ -64,6 +64,10 @@ primary checkout, registered worktrees, exact refs and stash object identities.
 Worktree paths and lock reasons use `worktree list --porcelain -z`; file status
 and ignored paths use NUL-delimited Git output. Missing or unreadable worktrees
 remain explicitly unavailable. Discovery performs no fetch, repair or prune.
+The fixed metadata queries reject stderr, including successful Git enumeration
+that warns about unreadable directories. Exit status zero alone does not prove
+complete traversal. Active bisect sessions are retained along with other
+in-progress Git operations.
 
 Under a live exclusive `WorkspaceLease`, call:
 
@@ -99,7 +103,11 @@ admission; an ignore rule is not disposal authorization.
 
 `consumer_probe` observes same-account cwd, descriptor, executable and mapped-file consumers without sending
 signals. The invoking owner's primary-checkout cwd is allowed because the
-primary is preserved. Other active or uninspectable consumers hold. Protected
+primary is preserved. The invoking process and all its threads are inspected
+too. Local admission exempts only its own live exclusive lease descriptor,
+checking descriptor number, path and inode; other descriptors and mappings in
+that process still block disposal. Direct observation has no lease exception
+by default. Other active or uninspectable consumers hold. Protected
 host service monitors require caller-admitted records containing exact pid,
 kernel startTicks, uid, comm, cgroup and an explicit reason. Only known service
 classes are eligible, and every identity is rechecked. Stale PID records never

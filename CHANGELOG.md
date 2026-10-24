@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Workspace cleanup now preserves the invoking controller's open readers and mappings, unreadable directories, and active bisect sessions. Only its exact live exclusive lease descriptor is exempt from consumer checks.
+
 - Offline evaluation catalog `0.6.2` binds the expanded capability catalog to its exact bytes while preserving measured `repository-delivery-validation` version `0.1.0`. A regression compares the report subject with its exact pinned capability definition. The four synthetic cases, graders and baseline remain unchanged; workspace coordination is covered by its separate Git/process regressions.
 
 - Pin deterministic evaluation metadata to the grader definition and record the replay runner separately. Local replay honors the documented Architecture root while retaining exact schema-digest checks. Verify prepared-source ancestry and preserve it through merge-commit integration.

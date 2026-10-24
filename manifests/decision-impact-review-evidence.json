@@ -6,18 +6,18 @@
     "type": "independent-agent-review",
     "independentOf": "implementation-author"
   },
-  "reviewedAt": "2026-10-24T00:38:30Z",
+  "reviewedAt": "2026-10-24T05:45:31Z",
   "reviewScope": "decision-to-primitive-impact",
   "target": {
     "primitiveCatalogSha256": "e22ca7bd32f75f510c91a49984e01084bf231c1caa5dea9827761a86a93935cd",
-    "primitiveSourcesSha256": "fd53795da1c3f030e9cee99fdaf56046db6366ffa853fcbfd4c5c27ecbe9d926",
+    "primitiveSourcesSha256": "1c076c55b2bd580b080da150885ba15e2f9facd10aa82226134051441223f5c2",
     "decisionSetSha256": "baa14c2db12eb909f6400898bf47fcfdf8dd97dded0076cfe52d299b4bae16e6",
     "architectureReleaseManifestCommit": "61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c",
     "architectureSourceCommit": "7b1d21462f70c411e75ae67ce80dcf688c9973e8",
     "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
   },
   "outcome": "no-blocking-mapping-findings",
-  "summary": "Separate read-only AI review /root/review_pr4 found no blocking mapping findings for all 23 pinned decisions and 16 primitives. ADR-0004 and ADR-0007 map the local workspace guard and delivery-workflow 0.2.0; remaining affected, no-impact and provisional mappings preserve existing ownership. The review also rechecked the corrected guard source; it does not establish runtime admission or human approval.",
+  "summary": "Separate read-only AI review /root/review_pr4 found no blocking mapping findings for all 23 pinned decisions and 16 primitives, including the workspace guard and delivery-workflow 0.2.0 under ADR-0004/0007. The corrected source also preserves own-process readers, unknown directory traversal and active bisect state. All affected, no-impact and provisional mappings retain their existing ownership. This review does not establish runtime admission or human approval.",
   "limitations": [
     "This evidence records an independent AI review; it does not replace human approval or adopt proposed Architecture decisions.",
     "Hashes bind the review to exact artifacts but cannot prove the semantic reasoning or make a judgment objectively true.",
