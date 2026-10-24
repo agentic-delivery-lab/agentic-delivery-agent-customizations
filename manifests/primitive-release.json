@@ -13,7 +13,7 @@
     "decisionInventoryPath": "architecture/references/decision-inventory.yml",
     "decisionInventorySha256": "87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592"
   },
-  "sourceCommit": "d7fc9a0e84b9e29521f79e1cf085e64d4431fed1",
-  "contentSha256": "e711591edd775217981afd61c86c419f917d79e9d57effc8df73d8b9fdff4a3f",
+  "sourceCommit": "5cbdcea76fc87743211eeaacda10d54b4f66d4a3",
+  "contentSha256": "33d8960b823fdfbc2f9ac9176a48fd08cb7f3966d646e24e726a36d0ee132226",
   "capabilityPolicyVersion": "0.1.0"
 }
