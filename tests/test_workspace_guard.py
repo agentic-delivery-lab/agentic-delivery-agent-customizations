@@ -32,6 +32,9 @@ except guard.WorkspaceHold as error:
 
 class WorkspaceGuardTests(unittest.TestCase):
     def setUp(self):
+        bytecode = patch.dict(os.environ, {'PYTHONDONTWRITEBYTECODE': '1'})
+        bytecode.start()
+        self.addCleanup(bytecode.stop)
         self.temporary = tempfile.TemporaryDirectory(prefix='workspace-guard-fixture-')
         self.addCleanup(self.temporary.cleanup)
         self.root = pathlib.Path(self.temporary.name) / 'repo'
