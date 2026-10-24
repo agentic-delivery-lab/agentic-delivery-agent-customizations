@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Offline evaluation catalog `0.6.2` binds the expanded capability catalog to its exact bytes. The four synthetic cases, graders and baseline remain unchanged; workspace coordination is covered by its separate Git/process regressions.
+
 - Pin deterministic evaluation metadata to the grader definition and record the replay runner separately. Local replay honors the documented Architecture root while retaining exact schema-digest checks. Verify prepared-source ancestry and preserve it through merge-commit integration.
 
 - Evaluation catalog `0.6.0` pins the accepted validator metadata and combined digest runner `1.1.0`. Replay rejects stale dependency hashes rather than silently executing changed artifacts. The four-case dataset and pinned baseline remain unchanged.
