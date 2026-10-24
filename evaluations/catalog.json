@@ -133,7 +133,7 @@
     },
     {
       "id": "candidate-capabilities-catalog",
-      "version": "0.2.0",
+      "version": "0.1.0",
       "kind": "candidate",
       "path": "capabilities/catalog.yml",
       "sha256": "6e5cde0bcbdf62bcf1376af09d0ad7870c6c945733b81639e684c0da2006c0c6"
