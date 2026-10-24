@@ -27,6 +27,7 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(first.report.contractVersion, '2.0.0');
   assert.equal(first.report.classification, 'synthetic');
   assert.equal(first.report.evaluationMode, 'offline');
+  assert.equal(first.report.subject.sourcePin.repository, 'agentic-delivery-lab/agentic-delivery-agent-customizations');
   const { stdout: capabilitiesSource } = await promisify(execFile)('git', [
     'show', `${first.candidateCommit}:${first.report.subject.sourcePin.path}`,
   ], { cwd: root });
@@ -68,10 +69,10 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(first.report.comparison.claim, 'no-change');
   assert.equal(first.report.review.status, 'pending');
   assert.equal(first.report.recommendation.action, 'owner-issue');
-  assert.equal(first.report.recommendation.ownerIssue, 'https://github.com/agentic-delivery-lab/agentic-delivery-primitives/issues/3');
+  assert.equal(first.report.recommendation.ownerIssue, 'https://github.com/agentic-delivery-lab/agentic-delivery-agent-customizations/issues/3');
   assert.equal(
     first.report.$schema,
-    'https://github.com/agentic-delivery-lab/agentic-delivery-architecture/blob/7b1d21462f70c411e75ae67ce80dcf688c9973e8/architecture/contracts/evaluation-report.schema.json',
+    'https://github.com/agentic-delivery-lab/agentic-delivery-architecture/blob/e1cb20f94ee398c8a26899cc6219b380975da3ca/architecture/contracts/evaluation-report.schema.json',
   );
   assert.deepEqual(first.report.results.deterministicChecks.map(({ outcome }) => outcome), [
     'pass', 'pass', 'pass', 'pass',
@@ -82,7 +83,9 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(candidatePins.length, 2);
   assert.equal(baselinePins.length, 2);
   assert.ok(candidatePins.every(({ sourcePin }) => sourcePin.commit === first.candidateCommit));
+  assert.ok(candidatePins.every(({ sourcePin }) => sourcePin.repository === 'agentic-delivery-lab/agentic-delivery-agent-customizations'));
   assert.ok(baselinePins.every(({ sourcePin }) => sourcePin.commit === 'e4933566fbf5b0f593830f8933f18fbd21024fa7'));
+  assert.ok(baselinePins.every(({ sourcePin }) => sourcePin.repository === 'agentic-delivery-lab/agentic-delivery-primitives'));
   assert.equal(first.reportSchemaValid, true);
 });
 

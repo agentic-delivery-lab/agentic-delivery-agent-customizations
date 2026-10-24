@@ -4,11 +4,11 @@ architectureId: urn:agentic-delivery:architecture:authority
 primitives:
   - id: codex-delivery
     kind: agent
-    version: 0.1.0
+    version: 0.2.0
     path: agents/codex/codex-delivery.md
     enforcement: instructional
-    adrs: [ADR-0009, ADR-0012, ADR-0015, ADR-0017, ADR-0023]
-    decisionIds: [ADR-0009, ADR-0012, ADR-0015, ADR-0017, ADR-0023]
+    adrs: [ADR-0009, ADR-0012, ADR-0015, ADR-0017, ADR-0018, ADR-0023, ADR-0024]
+    decisionIds: [ADR-0009, ADR-0012, ADR-0015, ADR-0017, ADR-0018, ADR-0023, ADR-0024]
     domains: [agentic-delivery-control-plane]
   - id: architecture-decision
     kind: skill

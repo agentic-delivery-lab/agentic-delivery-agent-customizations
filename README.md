@@ -1,9 +1,20 @@
-# Agentic Primitives
+# Agent Customizations
 
-Agentic Primitives is the canonical source for reusable, versioned agents,
+Agent Customizations is the canonical source for reusable, versioned agents,
 skills, instructions, hooks, validators, capabilities, and MCP/tool contracts.
 The catalog and release manifests define each Primitive's path, version,
 decision references, and immutable source evidence.
+
+The bounded context remains `agentic-primitives`; the hosting rename preserves
+repository ID `1380894656`. Current evaluation candidate references use
+`agentic-delivery-agent-customizations`. Immutable historical baseline pins
+and stable contract identifiers retain their original names.
+
+The current draft candidate selects Architecture draft.77 and covers all 24
+decision records. Five proposed-origin impact rows remain provisional; neither
+that draft pin nor the automated delivery-role instructions admit a runtime
+context or activate a participant. Requirements approval and controller context
+admission remain separate from reference coverage.
 
 The architecture direction is one way:
 

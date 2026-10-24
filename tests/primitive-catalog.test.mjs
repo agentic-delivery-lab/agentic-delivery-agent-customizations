@@ -24,9 +24,9 @@ test('every primitive has catalog, metadata, pinned Architecture, and impact cov
 }, async () => {
   assert.deepEqual(await validatePrimitiveCatalog(root), {
     primitives: 16,
-    decisions: 23,
+    decisions: 24,
     noImpact: 4,
-    provisional: 4,
+    provisional: 5,
   });
 });
 
@@ -261,7 +261,7 @@ test('active distribution, metadata, and decision boundaries remain documented',
     'docs/decisions/ADP-0001-primitive-release-and-projection.md',
   ]) await access(path.join(root, relativePath));
   const adpReference = await readFile(path.join(root, 'docs/decisions/ADP-0001-primitive-release-and-projection.md'), 'utf8');
-  assert.match(adpReference, /agentic-delivery-architecture\/blob\/7b1d21462f70c411e75ae67ce80dcf688c9973e8/);
+  assert.match(adpReference, /agentic-delivery-architecture\/blob\/e1cb20f94ee398c8a26899cc6219b380975da3ca/);
   assert.doesNotMatch(adpReference, /^## Decision Outcome/m);
 });
 
@@ -283,13 +283,13 @@ test('extracted skills resolve architecture context through an immutable release
 test('draft release pins exact Architecture manifest and source artifacts', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.0-draft.14');
+  assert.equal(release.version, '0.1.0-draft.15');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
-  assert.equal(release.architecture.version, '0.1.0-draft.24');
-  assert.equal(release.architecture.releaseManifestCommit, '61d99cbcca175f5bb5de4277d21f2ce4d56cbd0c');
-  assert.equal(release.architecture.releaseManifestSha256, '7ffb17661195fcc224b3fdd493e6a68233dcaee4400eae7cc0dd0a97ef4fba69');
-  assert.equal(release.architecture.sourceCommit, '7b1d21462f70c411e75ae67ce80dcf688c9973e8');
-  assert.equal(release.architecture.decisionInventorySha256, '87f5c8bb2c03ca7208c7ed29f7eeb5ccb8735e17b3d52c7ad126f68dd798a592');
+  assert.equal(release.architecture.version, '0.1.0-draft.77');
+  assert.equal(release.architecture.releaseManifestCommit, '6392c3770219304a78393faac42276e12eb1525f');
+  assert.equal(release.architecture.releaseManifestSha256, '703c0db4b815b529f8b0956b264ffad29e2c065d1b6d6da1f34e354ae0dacb6f');
+  assert.equal(release.architecture.sourceCommit, 'e1cb20f94ee398c8a26899cc6219b380975da3ca');
+  assert.equal(release.architecture.decisionInventorySha256, '9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b');
   assert.match(release.sourceCommit, /^[0-9a-f]{40}$/);
   assert.match(release.contentSha256, /^[0-9a-f]{64}$/);
   const { execFile } = await import('node:child_process');
