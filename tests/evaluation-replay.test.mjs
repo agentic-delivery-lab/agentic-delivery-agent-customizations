@@ -72,7 +72,7 @@ test('offline evaluation replay validates pinned artifacts and returns reproduci
   assert.equal(first.report.recommendation.ownerIssue, 'https://github.com/agentic-delivery-lab/agentic-delivery-agent-customizations/issues/3');
   assert.equal(
     first.report.$schema,
-    'https://github.com/agentic-delivery-lab/agentic-delivery-architecture/blob/e1cb20f94ee398c8a26899cc6219b380975da3ca/architecture/contracts/evaluation-report.schema.json',
+    'https://github.com/agentic-delivery-lab/agentic-delivery-architecture/blob/0423533176ad6239fe5d828736605b5a6360293c/architecture/contracts/evaluation-report.schema.json',
   );
   assert.deepEqual(first.report.results.deterministicChecks.map(({ outcome }) => outcome), [
     'pass', 'pass', 'pass', 'pass',
