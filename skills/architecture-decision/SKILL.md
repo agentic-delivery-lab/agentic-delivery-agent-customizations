@@ -20,7 +20,7 @@ If the repository lacks the canonical ADR documents, report that prerequisite. D
 
 A source issue must exist before an ADR change is prepared. It may be a normal product or implementation issue and does not automatically become an ADR.
 
-1. When the caller supplies an issue URL or number, verify that it belongs to the current repository. If it cannot be read, stop and request an accessible link or permission. Do not create a second issue merely because the identifier is malformed or inaccessible. Do not create a replacement issue.
+1. When the caller supplies an issue, resolve its actual repository and native issue identity. Record the repository ID/name and issue node ID/number. A bare number requires an explicitly established repository; the current checkout does not establish ownership. If the issue cannot be read, stop and request an accessible link or permission. Do not create a replacement issue or silently bind the number to another repository.
 2. When no issue is supplied, perform only a read-only search for a likely existing issue with `gh issue list`. Present any likely candidate for confirmation before using it. If the search fails because of missing tooling, authentication or connectivity, report the failure. Do not treat a failed search as no match. Do not guess the repository.
 3. If no suitable issue is found, check that the available user context can fill the required issue-form fields. Show a safe issue-form preview and require explicit confirmation before running `gh issue create`. Re-run the read-only search immediately before creation to reduce duplicate issues. If a new candidate appears, return to candidate confirmation. With missing context, do not create a partial issue.
 4. If an issue is readable but incomplete, prepare focused questions. Post questions as comments on the source issue only when issue communication is explicitly authorized. Otherwise show the questions for confirmation before posting. This intake must stop until the answers are available. If the user declines to answer or to create/comment, do not continue to the ADR.
@@ -41,23 +41,26 @@ Do not create an ADR for a local, easily reversible implementation detail, an or
 
 ## Branch-local runbook
 
-1. Use the supplied source issue. It also serves as the ADR tracking issue when it directly tracks the decision work. During triage or refining, create a linked GitHub sub-issue with the architecture-decision issue form when a separate ADR tracking issue is useful. If the source issue itself already uses that form, use it directly. During implementation, create or update the ADR tracking issue before adding the ADR change.
-2. For a new Architecture decision, prepare the next
-   `decisions/NNNN-title-with-dashes.md` record in Architecture Authority from
-   its template. A Primitive repository must not create a competing global ADR.
-   Decisions specific to primitive packaging that Architecture has not
-   canonized remain under this repository's `docs/decisions/` and use the local
-   `ADP-` identifier space. For a removal, record the affected decision path
-   and reason in its tracking issue and delete the file in the owning
-   repository's feature branch.
-3. Keep the ADR frontmatter without a status field. Retain the date, source-issue and relevant decision-maker fields.
-4. Work from a feature branch. The feature branch must be the pull-request head; never create a pull request from `main`, which is only the protected base.
-5. If the ADR addition or removal affects agentic primitives, README files or other Markdown, update those files in the same branch and pull request.
-6. Use `adr:needed` when an ADR change has been identified, `adr:proposed` while the branch or pull request is active, and `adr:removal` for a deletion. Apply `adr:rejected` only when a proposal is definitively rejected.
-7. Treat an added or removed ADR as provisional branch context. Use ADR files from `main` as canonical context for other branches; use the current branch's change only for work on that branch.
-8. Open or update a review pull request linking the source issue and ADR tracking issue. Put the ADR tracking issue in the pull-request body with a closing reference such as `Closes #123`. Use a non-closing reference such as `Refs #123` when a broader source issue must remain open. Approval alone does not close the issue. Do not merge it, bypass branch protection or close its tracking issue without explicit human authorization.
-9. After an approved review pull request is merged into `main`, the addition is official or the removal is official. Update the source issue and ADR tracking issue with the action and links, remove active labels and close the ADR tracking issue. A `Closes #123` reference closes it as part of the merge; otherwise close it explicitly. Keep a broader source issue open when other work remains.
-10. If a proposal is rejected, do not merge the ADR addition. Add the reason to the ADR tracking issue, apply `adr:rejected` and close that issue. The closed review pull request and Git history retain the proposal without adding it to `main`.
+1. Keep the originating context's source issue distinct from the Architecture Authority tracking issue. Resolve and link both native identities before preparing formal decision changes. The source issue can serve both roles only when it already belongs to Architecture Authority and tracks this decision work. Find an existing Authority tracking issue through read-only discovery; creating one requires the guarded intake and explicit authorization. If none is available or readable, stop formal decision work. Never infer an Authority issue from the originating issue's number or form.
+2. Prepare every formal ADR, ADP or ADD in Architecture Authority using its
+   pinned family template and identifier rules. Context-specific scope changes
+   the affected steward review, not the canonical text owner. Primitive
+   implementation notes may remain local, but must not create another formal
+   decision source or a competing identifier. Keep the local ADP-0001 file as a
+   pinned reference only. For a removal, record the canonical path and reason
+   in its tracking issue and delete it on the owning Authority feature branch.
+3. Follow the pinned shared decision template and validated frontmatter. Keep
+   stable family identifiers, source Issues, affected contexts and historical
+   provenance. Do not invent dates, decision makers or missing historical
+   rationale. Frontmatter has no lifecycle status; historical `origin.type`
+   does not erase a dated owner adoption.
+4. Work on an Authority feature branch for canonical decision text and Authority-owned artifacts. Use that branch as its pull-request head; `main` remains the protected base. Keep implementation changes in each owning repository's separate branch and pull request.
+5. Update affected Authority documentation in the Authority pull request. Record downstream primitive and other implementation work against its owning source issues. Start those implementation changes only after the approved Authority decision is merged and its Architecture Release is available; consume the exact immutable release pin rather than copying decision text or combining cross-repository changes into one pull request.
+6. Use `adr:needed`, `adr:proposed` and `adr:removal` on the verified Authority tracking issue as appropriate. Apply `adr:rejected` only for a definitively rejected proposal. Update another repository's source issue only within authorized scope; labels do not transfer issue identity or approval.
+7. Treat the Authority branch change as provisional context for that branch. Other branches use their approved, pinned Architecture Release. A merge establishes the canonical decision on Authority `main`; downstream adoption still requires an approved release and separate implementation acceptance.
+8. Open or update the Authority review pull request with repository-qualified links to both issues. A closing reference is allowed only for the Authority tracking issue whose work that merge completes, for example `Closes agentic-delivery-lab/agentic-delivery-architecture#123`. Reference a broader or cross-repository source issue using a non-closing full issue URL. Do not merge, bypass branch protection or close an issue without explicit human authorization. Honor any standing restriction on creating issues or pull requests.
+9. After the approved Authority pull request merges, record its merge commit and the approved Architecture Release version, manifest commit, prepared source commit and content digest. Close the Authority tracking issue only when its own acceptance criteria are complete and closure is authorized. Keep the originating implementation issue open until its separate owning-repository changes and checks are accepted. Document each consumer's exact release pin and remaining work; release publication does not prove runtime admission or activation.
+10. If the proposal is rejected, record the reason and rejection label on the verified Authority tracking issue, and close it only with authorization. Keep a broader originating issue open while alternatives or other work remain. The closed review pull request and Git history retain the proposal without adding it to `main`.
 
 The repository has no status-mutating script or acceptance workflow. `main` and Git history are the sources of truth.
 
@@ -65,12 +68,12 @@ The repository has no status-mutating script or acceptance workflow. `main` and 
 
 Report:
 
-- the source issue and, when applicable, its separate ADR tracking issue;
+- the originating source issue and Authority tracking issue, including their repository-qualified links and distinct native identities;
 - whether the branch adds, changes or removes an ADR;
-- the ADR path(s), related agent/documentation changes and pull request;
+- canonical Authority decision paths, Authority branch/pull request, and separate downstream branches/pull requests with their owning source issues;
 - which labels should be applied and which issue should be updated or closed;
-- after merge, update the source issue with the completed action and links;
-- that the change is provisional until merged to `main`, without calling it an official decision before then; and
+- after merge, the exact approved release pin, completed Authority work and remaining consumer work; update issues only within authorized scope;
+- whether canonical merge, release approval, consumer acceptance and runtime admission have each occurred; and
 - verification commands and results.
 
 ## Safety and audit rules

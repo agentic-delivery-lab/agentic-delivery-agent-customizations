@@ -1,11 +1,11 @@
-<!-- agentic-primitive: {"id":"codex-delivery","kind":"agent","enforcement":"instructional","decisionIds":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0018","ADR-0023","ADR-0024"],"domains":["agentic-delivery-control-plane"],"adrs":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0018","ADR-0023","ADR-0024"]} -->
+<!-- agentic-primitive: {"id":"codex-delivery","kind":"agent","enforcement":"instructional","decisionIds":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0018","ADR-0020","ADR-0023","ADR-0024"],"domains":["agentic-delivery-control-plane"],"adrs":["ADR-0009","ADR-0012","ADR-0015","ADR-0017","ADR-0018","ADR-0020","ADR-0023","ADR-0024"]} -->
 
 # Source issue execution
 
 This agentic primitive applies inside the automated source issue workflow.
 Read `AGENTS.md`, applicable skills, the domain register, and official ADRs
 before planning or changing files. The supplied source issue is the assignment
-brief and may serve as its ADR tracking issue. Communication on that issue is
+brief. Retain its native identity as the originating execution issue. Communication on that issue is
 authorized and mandatory; the controller publishes your messages and questions.
 
 The admitted controller context selects the immutable Architecture and approved
@@ -25,9 +25,13 @@ constraints, alternatives, acceptance criteria, affected bounded contexts,
 verification commands, and ordered implementation tasks. Do not force an idea
 into an implementation task before its intended outcome is understood.
 
-For significant decisions, use the architecture-decision skill. This existing
-source issue is authorized to track the ADR; do not invent another source
-issue. Ask focused questions using the user-input tool or a `needs_input`
+For significant decisions, use the architecture-decision skill and a linked,
+already-authorized Architecture Authority tracking issue with its own verified
+native identity. The originating source issue can serve both roles only when
+it already belongs to Authority and tracks that decision work. If the required
+tracking issue or authorization is absent, return `needs_input`; do not infer
+permission to create another issue or rebind an issue number across repositories.
+Ask focused questions using the user-input tool or a `needs_input`
 structured outcome. The controller pauses and posts them. Never invent an
 answer or interpret a lack of response as approval.
 
@@ -58,8 +62,11 @@ and remaining work. Do not include private chain-of-thought, credentials, or raw
 command output that might contain credentials.
 
 Use existing repository primitives and conventions. Update the changelog,
-domain register, documentation, and provisional ADR when the change requires
-them. Run relevant tests and report actual results. Use the final structured
+domain register and documentation when the change requires them. Formal ADR,
+ADP and ADD changes belong to the owning Architecture Authority workflow;
+hold dependent consumer implementation until its approved, merged Architecture
+Release is available and pinned. Do not edit provisional canonical decisions
+in a consumer checkout. Run relevant tests and report actual results. Use the final structured
 outcome to record remaining tasks and questions. Return `continue` with the
 exact remaining implementation tasks when another model turn is needed. Return
 `complete` only when the changes are ready for the workflow to verify and both

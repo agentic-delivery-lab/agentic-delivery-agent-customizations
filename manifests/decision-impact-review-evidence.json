@@ -6,37 +6,45 @@
     "type": "independent-agent-review",
     "independentOf": "implementation-author"
   },
-  "reviewedAt": "2026-10-24T06:46:10Z",
+  "reviewedAt": "2026-11-04T21:52:23Z",
   "reviewScope": "decision-to-primitive-impact",
   "target": {
-    "primitiveCatalogSha256": "e623cad93e9f62087d85af434ff8fd63aa1428dcfabf5a4972304a03586ecb56",
-    "primitiveSourcesSha256": "3f378427ed764ae38c0c789bb1571c367fb96bd095c4219b0eba827bd220cb1e",
-    "decisionSetSha256": "fcb9e77287e6106e4030317b8d79f315831d73282dd7a657c9903fb91d200eea",
-    "architectureReleaseManifestCommit": "6392c3770219304a78393faac42276e12eb1525f",
-    "architectureSourceCommit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
-    "decisionInventorySha256": "9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b"
+    "primitiveCatalogSha256": "367bc4b212b97c1d175957d4c1eba67df48d93adca621fbb12c554c0bbd5ff61",
+    "primitiveSourcesSha256": "bbaced9dae93767282728dac554a4341ffbfe5695e1d9e5dbe7b63e9569568b6",
+    "decisionSetSha256": "66aad6d67049e724bd54be76ee4a16d6c277764af8e1165d2da7436d808e7096",
+    "architectureReleaseManifestCommit": "ba804c044bd7dc0a7c5568062d43a1f0d9f3141b",
+    "architectureSourceCommit": "0423533176ad6239fe5d828736605b5a6360293c",
+    "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb"
   },
   "outcome": "no-blocking-mapping-findings",
-  "summary": "Separate read-only AI review /root/review_pr4 found no blocking mappings for all 24 pinned decisions and 16 primitives. Delivery role 0.2.0 implements the instructional W08 allowance, W02 runner exclusions and ADR-0024 admitted Requirements-reference boundaries. Current candidate evaluation references use the verified Customizations name; immutable historical baseline references remain unchanged. No runtime admission or human approval is established.",
+  "summary": "Separate read-only AI reviewer /root/review_pr4 completed all 24 canonical decision and 16 primitive mappings, with 20 affected rows, four justified no-impact rows and zero provisional rows. Three Required findings were resolved and exact target hashes independently recomputed. No remaining Critical or Required findings in the reviewed semantic/code scope.",
   "limitations": [
-    "This evidence records an independent AI review; it does not replace human approval or adopt proposed Architecture decisions.",
-    "Hashes bind the review to exact artifacts but cannot prove the semantic reasoning or make a judgment objectively true.",
-    "Selected Architecture draft.77 is not an approved runtime context. This draft candidate preserves five proposed-origin impact rows and all released-artifact admission gates."
+    "This completed independent AI review does not replace human release acceptance, hosted checks, runtime admission or production activation.",
+    "The reviewer verified source semantics and exact hashes but did not rerun the full suite. Final prepared source/content self-pins are checked separately.",
+    "Owner adoption qualifies only the exact known Architecture 0.1.0 manifest, inventory and dated owner-record bytes. Historical proposed origins are unchanged.",
+    "The measured repository-delivery-validation subject remains version 0.1.0 with four synthetic cases; no expanded evaluation coverage is claimed."
   ],
   "findings": [
     {
-      "id": "IMPACT-001",
-      "severity": "P1",
-      "finding": "A released Primitive could previously accept a draft Architecture release and provisional decision mappings.",
+      "id": "IMPACT-003",
+      "severity": "P2",
+      "finding": "The capabilities artifact version incorrectly changed the measured repository-delivery-validation subject to 0.2.0.",
       "status": "addressed",
-      "resolution": "Release-readiness validation now requires a released Architecture pin and zero provisional decisions, with regression tests for both conditions."
+      "resolution": "Restored artifact subject version 0.1.0 while retaining the changed catalog content digest and separate architecture-decision-management version."
     },
     {
-      "id": "IMPACT-002",
+      "id": "IMPACT-004",
       "severity": "P1",
-      "finding": "The impact manifest did not preserve an independent review identity or bind review evidence to exact artifacts.",
+      "finding": "The decision skill mixed originating and Authority tracking Issues and suggested one cross-repository implementation branch.",
       "status": "addressed",
-      "resolution": "A schema-validated review record now pins the catalog bytes, canonical decision set, Architecture manifest commit, source commit, and inventory digest."
+      "resolution": "The complete intake, runbook and output now retain native Issue identities, require an authorized Authority tracking Issue, and separate release-gated consumer changes with repository-qualified links."
+    },
+    {
+      "id": "IMPACT-005",
+      "severity": "P1",
+      "finding": "The delivery role still authorized an arbitrary originating Issue to track canonical Authority decisions.",
+      "status": "addressed",
+      "resolution": "Delivery role 0.3.0 requires the linked native Authority tracking Issue, holds when missing, routes formal changes to Authority, and maps ADR-0020 in metadata, catalog and impact coverage."
     }
   ]
 }

@@ -4,9 +4,22 @@
 
 ### Added
 
+- Prepare a prospective Primitive 0.1.0 candidate against owner-approved
+  Architecture 0.1.0. Exact manifest, inventory and owner-record hashes qualify
+  five dated adoptions without rewriting historical origins. Fresh independent
+  impact review, exact source binding and owner release acceptance remain required.
+
 - A local Linux workspace guard coordinates managed sessions through shared/exclusive OS leases and preserves uncertain work during cleanup admission. Real Git/process regressions cover hidden changes, inherited leases, active readers and unsupported profiles. Distribution installation and Control Plane integration remain required before claiming managed enforcement.
 
 ### Fixed
+
+- Architecture-decision skill 0.2.0 routes all formal ADR, ADP and ADD text to
+  Architecture Authority and preserves the shared family contract. Delivery
+  role 0.3.0 keeps originating and Authority tracking Issues distinct and holds
+  dependent consumer changes until an approved Architecture Release exists. Catalog
+  validator 0.1.1 keeps unknown or changed adoption references provisional.
+  Capability and evaluation catalogs bind the changed definition bytes while
+  the measured repository-delivery-validation subject remains version 0.1.0.
 
 - Workspace cleanup now preserves the invoking controller's open readers and mappings, unreadable directories, and active bisect sessions. Only its exact live exclusive lease descriptor is exempt from consumer checks.
 

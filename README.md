@@ -10,11 +10,13 @@ repository ID `1380894656`. Current evaluation candidate references use
 `agentic-delivery-agent-customizations`. Immutable historical baseline pins
 and stable contract identifiers retain their original names.
 
-The current draft candidate selects Architecture draft.77 and covers all 24
-decision records. Five proposed-origin impact rows remain provisional; neither
-that draft pin nor the automated delivery-role instructions admit a runtime
-context or activate a participant. Requirements approval and controller context
-admission remain separate from reference coverage.
+This branch prepares the prospective Primitive 0.1.0 candidate against the
+owner-approved Architecture 0.1.0 release. It covers all 24 decision records.
+Five historical proposed origins remain unchanged; their exact dated owner
+adoption is verified before reviewed mappings can replace provisional ones.
+The candidate is not a published release or participant activation. Current
+main remains draft.15 until its own reviewed acceptance. Requirements and
+controller runtime admission remain separate from impact coverage.
 
 The architecture direction is one way:
 

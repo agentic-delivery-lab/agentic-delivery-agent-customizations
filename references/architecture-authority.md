@@ -25,3 +25,18 @@ or maintain a competing register.
 The release pin is provisional while the Primitive release is `draft`. A
 change to either Architecture commit or digest requires a reviewed Primitive
 release update and regenerated traceability evidence.
+
+## Dated owner adoption
+
+For Architecture 0.1.0, the validator recognizes the exact released manifest,
+prepared source, decision inventory and owner-scope acceptance record. The
+record's immutable path and SHA-256 bind the five adopted decision IDs.
+Historical `origin.type: proposed` values remain unchanged. Release status
+alone, a different document, partial references and future proposals cannot
+supply adoption. No Issue, Project or environment approval flag selects it.
+
+This qualification does not supply a fresh Primitive semantic review. That
+separate review must bind the current catalog bytes, cataloged source bytes,
+decision mappings and Architecture pins. An old review cannot be retargeted.
+The prospective Primitive 0.1.0 metadata describes the candidate; publication,
+consumer adoption and runtime activation require their own acceptance.
