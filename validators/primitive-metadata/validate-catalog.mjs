@@ -22,6 +22,25 @@ const METADATA_ROOTS = [
 const SHA256 = /^[0-9a-f]{64}$/;
 const COMMIT = /^[0-9a-f]{40}$/;
 const DECISION_ID = /^(ADR|ADP|ADD)-[0-9]{4}$/;
+// Exact owner-adopted Architecture source. These origins remain historical;
+// no release-status flag or arbitrary document may adopt another proposal.
+const OWNER_ADOPTION_SOURCE = Object.freeze({
+  releaseManifestCommit: 'ba804c044bd7dc0a7c5568062d43a1f0d9f3141b',
+  releaseManifestSha256: '60fcde50625347826597acd55aae8cfef259a05ca793a7f36380fdc74a4e1acb',
+  architectureSourceCommit: '0423533176ad6239fe5d828736605b5a6360293c',
+  decisionInventorySha256: 'cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb',
+  path: 'architecture/references/owner-scope-acceptance-2026-11-03.md',
+  sha256: '8bea8ea1d02e081baa60b3e35ba0d4a662d1491e3512cc1f07e0dc578f7214e1',
+});
+const OWNER_ADOPTED_DECISIONS = new Set(['ADR-0020', 'ADR-0021', 'ADR-0022', 'ADR-0023', 'ADR-0024']);
+
+function matchesOwnerAdoptedRelease(release) {
+  return release.status === 'released' && release.version === '0.1.0'
+    && release.architectureId === 'urn:agentic-delivery:architecture:authority'
+    && release.sourceRepository === 'agentic-delivery-lab/agentic-delivery-architecture'
+    && release.sourceCommit === OWNER_ADOPTION_SOURCE.architectureSourceCommit
+    && release.contentSha256 === 'b754a82b5fca30a933057602bba6ab4f204c2a937be3a3076d7610aacac826d2';
+}
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
@@ -61,7 +80,7 @@ function validateUniqueIdentifiers(values, label) {
   return seen;
 }
 
-export function validateArchitecturePin({ pin, releaseManifestRaw, decisionInventoryRaw }) {
+export function validateArchitecturePin({ pin, releaseManifestRaw, decisionInventoryRaw, ownerAcceptanceRaw }) {
   if (!COMMIT.test(pin.releaseManifestCommit ?? '')) throw new Error('Architecture releaseManifestCommit must be an immutable commit SHA');
   if (!COMMIT.test(pin.sourceCommit ?? '')) throw new Error('Architecture sourceCommit must be an immutable commit SHA');
   if (!SHA256.test(pin.releaseManifestSha256 ?? '') || sha256(releaseManifestRaw) !== pin.releaseManifestSha256) {
@@ -87,14 +106,37 @@ export function validateArchitecturePin({ pin, releaseManifestRaw, decisionInven
   const inventoryIds = validateUniqueIdentifiers(decisionInventory.records.map((record) => record?.id), 'Architecture decision inventory');
   if (!sameValues(releaseIds, inventoryIds)) throw new Error('Architecture release decisionIds do not match the pinned source inventory');
 
+  let ownerAdoption;
+  if (pin.releaseManifestCommit === OWNER_ADOPTION_SOURCE.releaseManifestCommit) {
+    if (!matchesOwnerAdoptedRelease(releaseManifest)
+      || pin.releaseManifestSha256 !== OWNER_ADOPTION_SOURCE.releaseManifestSha256
+      || pin.decisionInventorySha256 !== OWNER_ADOPTION_SOURCE.decisionInventorySha256
+      || pin.id !== 'urn:agentic-delivery:architecture:authority'
+      || sha256(ownerAcceptanceRaw ?? '') !== OWNER_ADOPTION_SOURCE.sha256) {
+      throw new Error('Architecture owner adoption requires the exact released manifest, inventory and owner record.');
+    }
+    ownerAdoption = { ...OWNER_ADOPTION_SOURCE };
+  }
+
   return {
     releaseManifest,
     decisionInventory,
     decisionInventorySha256: pin.decisionInventorySha256,
+    ownerAdoption,
   };
 }
 
-export function validateDecisionImpactCoverage({ architectureRelease, decisionInventory, impactReview, catalog }) {
+export function validateDecisionImpactCoverage({ architectureRelease, decisionInventory, impactReview, catalog, verifiedOwnerAdoption }) {
+  let adopted = new Set();
+  if (verifiedOwnerAdoption !== undefined) {
+    if (!verifiedOwnerAdoption || Object.keys(verifiedOwnerAdoption).length !== Object.keys(OWNER_ADOPTION_SOURCE).length
+      || Object.entries(OWNER_ADOPTION_SOURCE).some(([key, value]) => verifiedOwnerAdoption[key] !== value)
+      || !matchesOwnerAdoptedRelease(architectureRelease)
+      || architectureRelease.decisionInventorySha256 !== OWNER_ADOPTION_SOURCE.decisionInventorySha256) {
+      throw new Error('Unsupported or mismatched verified owner adoption reference.');
+    }
+    adopted = OWNER_ADOPTED_DECISIONS;
+  }
   const releaseIds = validateUniqueIdentifiers(architectureRelease?.decisionIds ?? [], 'Architecture release manifest');
   const inventoryRecords = decisionInventory?.records;
   if (!Array.isArray(inventoryRecords)) throw new Error('Architecture decision inventory must contain records');
@@ -139,8 +181,9 @@ export function validateDecisionImpactCoverage({ architectureRelease, decisionIn
     if (!record?.origin || typeof record.origin.type !== 'string' || record.origin.type.length === 0) {
       throw new Error(`Architecture decision ${row.decisionId} is missing origin.type`);
     }
-    const expectedReviewStatus = record.origin?.type === 'proposed' ? 'provisional' : 'reviewed';
+    const expectedReviewStatus = record.origin?.type === 'proposed' && !adopted.has(row.decisionId) ? 'provisional' : 'reviewed';
     if (row.reviewStatus !== expectedReviewStatus) {
+      if (adopted.has(row.decisionId)) throw new Error(`owner-adopted decision ${row.decisionId} must be reviewed`);
       const qualifier = expectedReviewStatus === 'provisional' ? 'must be provisional' : 'cannot be provisional';
       throw new Error(`${expectedReviewStatus === 'provisional' ? 'proposed' : 'non-proposed'} decision ${row.decisionId} ${qualifier}`);
     }
@@ -246,7 +289,9 @@ async function loadPinnedArchitectureAuthority(architectureRoot, pin) {
   if (!architectureRoot) throw new Error('ARCHITECTURE_AUTHORITY_ROOT must point to the pinned Architecture Authority checkout');
   const releaseManifestRaw = await gitShow(architectureRoot, pin.releaseManifestCommit, ARCHITECTURE_MANIFEST_PATH);
   const decisionInventoryRaw = await gitShow(architectureRoot, pin.sourceCommit, pin.decisionInventoryPath);
-  return validateArchitecturePin({ pin, releaseManifestRaw, decisionInventoryRaw });
+  const ownerAcceptanceRaw = pin.releaseManifestCommit === OWNER_ADOPTION_SOURCE.releaseManifestCommit
+    ? await gitShow(architectureRoot, pin.releaseManifestCommit, OWNER_ADOPTION_SOURCE.path) : undefined;
+  return validateArchitecturePin({ pin, releaseManifestRaw, decisionInventoryRaw, ownerAcceptanceRaw });
 }
 
 export async function walkFiles(repositoryRoot, relativeDirectory) {
@@ -470,6 +515,7 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
         decisionInventory: architectureAuthority.decisionInventory,
         impactReview,
         catalog,
+        verifiedOwnerAdoption: architectureAuthority.ownerAdoption,
       });
     } catch (error) {
       errors.push(error.message);

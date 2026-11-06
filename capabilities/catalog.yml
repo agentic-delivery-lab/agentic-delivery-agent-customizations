@@ -5,7 +5,7 @@ capabilities:
     primitiveIds: [issue-branch-name-validator, commit-range-validator, changelog-structure-validator, gitmoji-validator, pull-request-body-validator, pull-request-branch-validator, pull-request-title-validator, source-issue-validator]
     deterministic: true
   - id: architecture-decision-management
-    version: 0.1.0
+    version: 0.2.0
     primitiveIds: [architecture-decision, ubiquitous-language]
     deterministic: false
   - id: local-workspace-coordination

@@ -14,6 +14,7 @@ jobs:
     env:
       ARCHITECTURE_REPORT_SCHEMA: architecture-authority/architecture/contracts/evaluation-report.schema.json
       ARCHITECTURE_AUTHORITY_ROOT: ${{ github.workspace }}/architecture-authority
+      ADOPTED_ARCHITECTURE_TEST_ROOT: ${{ github.workspace }}/architecture-authority
     steps:
       - name: Check out primitives
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5

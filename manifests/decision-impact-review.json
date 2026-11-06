@@ -1,12 +1,12 @@
 {
   "$schema": "../schemas/primitive-impact-review.schema.json",
   "schemaVersion": 1,
-  "architectureVersion": "0.1.0-draft.77",
-  "architectureSourceCommit": "e1cb20f94ee398c8a26899cc6219b380975da3ca",
-  "decisionInventorySha256": "9aad2877bbb89589d704eeebbeaef9e4a1850d70429125cf1d1041b2b106f59b",
+  "architectureVersion": "0.1.0",
+  "architectureSourceCommit": "0423533176ad6239fe5d828736605b5a6360293c",
+  "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "3e4bf33a4b08d71224d50a5138ecdb5e91820fbf1eeb964f1b72c8ef20bd61ad"
+    "evidenceSha256": "facd12ab2fd8906ab90caab85021d4d3ed90918896a8fc717eb4b15e43a71c7c"
   },
   "decisions": [
     {
@@ -16,7 +16,7 @@
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
@@ -175,7 +175,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
@@ -195,7 +195,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
@@ -208,7 +208,7 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "scope": "catalog-contract"
         }
       ],
@@ -221,7 +221,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
@@ -247,7 +247,7 @@
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
@@ -260,12 +260,12 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "scope": "release-contract"
         },
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
@@ -285,7 +285,7 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "scope": "release-contract"
         }
       ],
@@ -300,62 +300,67 @@
     },
     {
       "decisionId": "ADR-0020",
-      "reviewStatus": "provisional",
+      "reviewStatus": "reviewed",
       "disposition": "affected",
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.1.0",
+          "version": "0.2.0",
+          "scope": "implementation"
+        },
+        {
+          "id": "codex-delivery",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "If adopted, the proposed canonical-source rule requires this skill to retire local ADP prose in favor of a pinned Architecture reference."
+      "rationale": "The owner-adopted canonical-source rule routes all formal ADR, ADP and ADD text to Architecture Authority. The skill preserves context-specific steward review and permits only non-formal implementation notes locally; it creates no competing ADP source. The automated delivery role retains the native originating execution Issue, requires a separately identified Authority tracking Issue, and holds consumer changes until the approved Architecture Release is available."
     },
     {
       "decisionId": "ADR-0021",
-      "reviewStatus": "provisional",
+      "reviewStatus": "reviewed",
       "disposition": "affected",
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "If adopted, the proposed shared decision-artifact contract may change the skill's authoring and review guidance."
+      "rationale": "The skill consumes the pinned shared decision template and validated frontmatter for stable ADR, ADP and ADD identifiers. It preserves unknown historical facts and does not apply one universal template to unrelated artifact families."
     },
     {
       "decisionId": "ADR-0022",
-      "reviewStatus": "provisional",
+      "reviewStatus": "reviewed",
       "disposition": "no-impact",
       "affectedPrimitives": [],
-      "rationale": "The proposed Neon webhook replay state is Control Plane runtime behavior and no cataloged Primitive owns that storage."
+      "rationale": "The adopted Neon webhook replay state remains Control Plane runtime behavior; no cataloged Primitive owns that storage or its production admission."
     },
     {
       "decisionId": "ADR-0023",
-      "reviewStatus": "provisional",
+      "reviewStatus": "reviewed",
       "disposition": "affected",
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "The delivery role keeps Project planning input separate from source-Issue execution authorization. This draft impact review retains the inventory proposed-origin classification without claiming runtime adoption."
+      "rationale": "The instructional delivery role keeps Project planning data separate from native source-Issue execution authority. Owner adoption changes the Architecture disposition; it does not admit the controller runtime or grant Project access."
     },
     {
       "decisionId": "ADR-0024",
-      "reviewStatus": "provisional",
+      "reviewStatus": "reviewed",
       "disposition": "affected",
       "affectedPrimitives": [
         {
           "id": "codex-delivery",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "scope": "implementation"
         }
       ],
-      "rationale": "The role consumes only controller-admitted approved Requirements references applicable to the native origin repository, holding missing or uncertain authority. It does not own normative requirements or implement controller context admission. Proposed-origin provenance and draft release limits remain explicit."
+      "rationale": "The role consumes only controller-admitted approved Requirements references applicable to the native origin repository and holds missing or uncertain authority. Historical proposed origins remain intact; impact coverage does not implement or approve controller context admission."
     }
   ]
 }
