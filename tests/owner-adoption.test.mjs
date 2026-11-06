@@ -8,7 +8,9 @@ import { parse as parseYaml } from 'yaml';
 import { validateArchitecturePin, validateDecisionImpactCoverage, validateSemanticReviewEvidence } from '../validators/primitive-metadata/validate-catalog.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
-const architectureRoot = process.env.ADOPTED_ARCHITECTURE_TEST_ROOT ?? path.resolve(root, '../agentic-delivery-architecture');
+const architectureRoot = process.env.ADOPTED_ARCHITECTURE_TEST_ROOT
+  ?? process.env.ARCHITECTURE_AUTHORITY_ROOT
+  ?? path.resolve(root, '../agentic-delivery-architecture');
 const commit = 'ba804c044bd7dc0a7c5568062d43a1f0d9f3141b';
 const adoptedIds = ['ADR-0020', 'ADR-0021', 'ADR-0022', 'ADR-0023', 'ADR-0024'];
 const pin = { id: 'urn:agentic-delivery:architecture:authority', version: '0.1.0', releaseManifestCommit: commit,
