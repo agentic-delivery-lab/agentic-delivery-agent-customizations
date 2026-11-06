@@ -10,13 +10,17 @@ repository ID `1380894656`. Current evaluation candidate references use
 `agentic-delivery-agent-customizations`. Immutable historical baseline pins
 and stable contract identifiers retain their original names.
 
-This branch prepares the prospective Primitive 0.1.0 candidate against the
-owner-approved Architecture 0.1.0 release. It covers all 24 decision records.
+The release manifest pins the owner-approved Architecture 0.1.0 release and
+covers all 24 decision records.
 Five historical proposed origins remain unchanged; their exact dated owner
 adoption is verified before reviewed mappings can replace provisional ones.
-The candidate is not a published release or participant activation. Current
-main remains draft.15 until its own reviewed acceptance. Requirements and
-controller runtime admission remain separate from impact coverage.
+Publication and accepted manifest commits are recorded in
+[GitHub Releases](https://github.com/agentic-delivery-lab/agentic-delivery-agent-customizations/releases).
+A working tree or prospective manifest alone does not establish publication
+or participant activation. Requirements and controller runtime admission
+remain separate from impact coverage. No MCP/tool contract is currently
+implemented or cataloged; the unsupported contract-directory scaffold has
+been removed.
 
 The architecture direction is one way:
 

@@ -13,6 +13,13 @@
 
 ### Fixed
 
+- Prepare Primitive 0.1.1 with documentation corrections: all formal decision
+  text belongs to Architecture Authority, including context-specific records;
+  the local index contains references and implementation notes only. Remove
+  the MCP contract scaffold because no approved contract is implemented, and
+  identify GitHub Releases as publication evidence. Primitive definitions,
+  impact mappings and their exact semantic review targets are unchanged.
+
 - Architecture-decision skill 0.2.0 routes all formal ADR, ADP and ADD text to
   Architecture Authority and preserves the shared family contract. Delivery
   role 0.3.0 keeps originating and Authority tracking Issues distinct and holds
