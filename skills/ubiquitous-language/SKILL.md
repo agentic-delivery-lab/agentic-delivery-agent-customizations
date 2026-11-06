@@ -1,9 +1,9 @@
-<!-- agentic-primitive: {"id":"ubiquitous-language","kind":"skill","enforcement":"instructional","decisionIds":["ADR-0003"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0003"]} -->
-
 ---
 name: ubiquitous-language
 description: Apply this repository's context-scoped domain language when changing domain-bearing code, documentation, agent instructions, or architecture decisions.
 ---
+
+<!-- agentic-primitive: {"id":"ubiquitous-language","kind":"skill","enforcement":"instructional","decisionIds":["ADR-0003"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0003"]} -->
 
 # Ubiquitous language
 

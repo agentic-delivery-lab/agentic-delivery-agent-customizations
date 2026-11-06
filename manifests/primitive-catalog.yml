@@ -12,7 +12,7 @@ primitives:
     domains: [agentic-delivery-control-plane]
   - id: architecture-decision
     kind: skill
-    version: 0.2.0
+    version: 0.2.1
     path: skills/architecture-decision/SKILL.md
     enforcement: instructional
     adrs: [ADR-0001, ADR-0020, ADR-0021]
@@ -20,7 +20,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: delivery-workflow
     kind: skill
-    version: 0.2.0
+    version: 0.2.1
     path: skills/delivery-workflow/SKILL.md
     enforcement: instructional
     adrs: [ADR-0004, ADR-0005, ADR-0006, ADR-0007, ADR-0008]
@@ -36,7 +36,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: plain-language-communication
     kind: skill
-    version: 0.1.0
+    version: 0.1.1
     path: skills/plain-language-communication/SKILL.md
     enforcement: instructional
     adrs: [ADR-0002]
@@ -44,7 +44,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: ubiquitous-language
     kind: skill
-    version: 0.1.0
+    version: 0.1.1
     path: skills/ubiquitous-language/SKILL.md
     enforcement: instructional
     adrs: [ADR-0003]
@@ -124,7 +124,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: primitive-catalog-validator
     kind: validator
-    version: 0.1.1
+    version: 0.1.2
     path: validators/primitive-metadata/validate-catalog.mjs
     enforcement: deterministic
     adrs: [ADR-0013, ADR-0018]

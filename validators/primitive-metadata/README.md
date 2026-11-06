@@ -8,6 +8,12 @@ Decision IDs include ADR, ADP, and ADD records; proposed Architecture records
 must remain provisional until adopted. This validator reads pinned source and
 does not store secrets, mutable runtime state, or publication credentials.
 
+Cataloged skills must begin with YAML frontmatter containing their catalog
+name and a nonempty description. Keep the inline Primitive metadata after
+the closing frontmatter delimiter so stock clients can discover the skill.
+The format check does not establish packaged resource availability, useful
+execution, release acceptance or runtime admission.
+
 The independent semantic-review evidence is content-hashed and bound to the
 exact Primitive catalog, cataloged Primitive source bytes, decision set, and
 Architecture release pins. Any change to a cataloged Primitive source file
