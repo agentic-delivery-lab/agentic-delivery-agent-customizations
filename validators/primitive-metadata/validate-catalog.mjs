@@ -312,6 +312,24 @@ export async function walkFiles(repositoryRoot, relativeDirectory) {
   return files;
 }
 
+export function validateNativeSkillSource(source, primitive) {
+  const header = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(source);
+  if (!header) throw new Error(`${primitive.path} must start with YAML frontmatter`);
+  const frontmatter = parseYaml(header[1]);
+  if (!frontmatter || typeof frontmatter !== 'object' || Array.isArray(frontmatter)
+    || typeof frontmatter.name !== 'string' || frontmatter.name !== primitive.id
+    || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(frontmatter.name)
+    || frontmatter.name.length > 64) {
+    throw new Error(`${primitive.path} frontmatter name must match the catalog skill id`);
+  }
+  if (typeof frontmatter.description !== 'string' || !frontmatter.description.trim()) {
+    throw new Error(`${primitive.path} frontmatter description must be a nonempty string`);
+  }
+  if (extractMetadata(header[1], primitive.path)) {
+    throw new Error(`${primitive.path} agentic-primitive metadata must follow YAML frontmatter`);
+  }
+}
+
 function extractMetadata(source, relativePath) {
   const matches = [
     ...source.matchAll(/<!--\s*agentic-primitive:\s*(\{[^\r\n]*\})\s*-->/g),
@@ -446,6 +464,7 @@ export async function validatePrimitiveCatalog(repositoryRoot = root, { architec
       try {
         const sourceBytes = await readFile(absolutePath);
         primitiveSources.push({ path: primitive.path, sourceBytes });
+        if (primitive.kind === 'skill') validateNativeSkillSource(sourceBytes.toString('utf8'), primitive);
         const metadata = extractMetadata(sourceBytes.toString('utf8'), primitive.path);
         if (!metadata) {
           errors.push(`${primitive.path} is missing agentic-primitive metadata`);

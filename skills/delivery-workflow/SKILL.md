@@ -1,9 +1,9 @@
-<!-- agentic-primitive: {"id":"delivery-workflow","kind":"skill","enforcement":"instructional","decisionIds":["ADR-0004","ADR-0005","ADR-0006","ADR-0007","ADR-0008"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0004","ADR-0005","ADR-0006","ADR-0007","ADR-0008"]} -->
-
 ---
 name: delivery-workflow
 description: Apply this repository's trunk-based delivery, Conventional Commits, Gitmoji and curated changelog rules when planning, changing or reviewing delivery work.
 ---
+
+<!-- agentic-primitive: {"id":"delivery-workflow","kind":"skill","enforcement":"instructional","decisionIds":["ADR-0004","ADR-0005","ADR-0006","ADR-0007","ADR-0008"],"domains":["agentic-delivery-governance"],"adrs":["ADR-0004","ADR-0005","ADR-0006","ADR-0007","ADR-0008"]} -->
 
 # Delivery workflow
 

@@ -13,6 +13,13 @@
 
 ### Fixed
 
+- Correct all four canonical skills to begin with their existing YAML
+  frontmatter, moving only the Primitive metadata comment below it. Stock
+  Codex discovery previously omitted the leading-comment layout. Catalog
+  validation now rejects that layout and invalid discovery fields; skill
+  instructions and invocation policies are unchanged. Packaged resource
+  execution and release acceptance require separate evidence.
+
 - Prepare Primitive 0.1.1 with documentation corrections: all formal decision
   text belongs to Architecture Authority, including context-specific records;
   the local index contains references and implementation notes only. Remove

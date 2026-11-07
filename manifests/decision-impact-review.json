@@ -6,7 +6,7 @@
   "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "facd12ab2fd8906ab90caab85021d4d3ed90918896a8fc717eb4b15e43a71c7c"
+    "evidenceSha256": "3db0082d71143f9dc726bc48c2f0849962a87387e41ea4eddb1e2c337127be1f"
   },
   "decisions": [
     {
@@ -16,7 +16,7 @@
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         }
       ],
@@ -29,7 +29,7 @@
       "affectedPrimitives": [
         {
           "id": "plain-language-communication",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "scope": "implementation"
         }
       ],
@@ -42,7 +42,7 @@
       "affectedPrimitives": [
         {
           "id": "ubiquitous-language",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "scope": "implementation"
         }
       ],
@@ -55,7 +55,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -78,7 +78,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -106,7 +106,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -124,7 +124,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -157,7 +157,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -208,7 +208,7 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "scope": "catalog-contract"
         }
       ],
@@ -260,7 +260,7 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "scope": "release-contract"
         },
         {
@@ -285,7 +285,7 @@
       "affectedPrimitives": [
         {
           "id": "primitive-catalog-validator",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "scope": "release-contract"
         }
       ],
@@ -305,7 +305,7 @@
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         },
         {
@@ -323,7 +323,7 @@
       "affectedPrimitives": [
         {
           "id": "architecture-decision",
-          "version": "0.2.0",
+          "version": "0.2.1",
           "scope": "implementation"
         }
       ],

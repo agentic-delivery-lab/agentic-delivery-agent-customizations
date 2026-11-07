@@ -6,45 +6,24 @@
     "type": "independent-agent-review",
     "independentOf": "implementation-author"
   },
-  "reviewedAt": "2026-11-04T21:52:23Z",
+  "reviewedAt": "2026-11-06T19:23:09Z",
   "reviewScope": "decision-to-primitive-impact",
   "target": {
-    "primitiveCatalogSha256": "367bc4b212b97c1d175957d4c1eba67df48d93adca621fbb12c554c0bbd5ff61",
-    "primitiveSourcesSha256": "bbaced9dae93767282728dac554a4341ffbfe5695e1d9e5dbe7b63e9569568b6",
-    "decisionSetSha256": "66aad6d67049e724bd54be76ee4a16d6c277764af8e1165d2da7436d808e7096",
+    "primitiveCatalogSha256": "cbd2388168f8c96b2727881f980b5432b97ae1834b1afd87ffd83ec70cd4e47b",
+    "primitiveSourcesSha256": "20bcee8d3b4ff3e896aceb440512200450de545e481a16ec9609f66ee4c6e5a2",
+    "decisionSetSha256": "e4674d22a57cc59b2b126c5d3c05db8e2e94fa4bfff8f6ffc95c91d76a7632c8",
     "architectureReleaseManifestCommit": "ba804c044bd7dc0a7c5568062d43a1f0d9f3141b",
     "architectureSourceCommit": "0423533176ad6239fe5d828736605b5a6360293c",
     "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb"
   },
   "outcome": "no-blocking-mapping-findings",
-  "summary": "Separate read-only AI reviewer /root/review_pr4 completed all 24 canonical decision and 16 primitive mappings, with 20 affected rows, four justified no-impact rows and zero provisional rows. Three Required findings were resolved and exact target hashes independently recomputed. No remaining Critical or Required findings in the reviewed semantic/code scope.",
+  "summary": "Fresh separate read-only AI reviewer /root/review_pr4 verified all 24 canonical decisions and 16 Primitive mappings (20 affected, four justified no-impact, zero provisional), all five component patch versions, exact four-skill YAML/metadata/instruction preservation, native discovery evidence and format guard. No remaining Critical or Required semantic/source findings; exact target hashes independently recomputed.",
   "limitations": [
-    "This completed independent AI review does not replace human release acceptance, hosted checks, runtime admission or production activation.",
-    "The reviewer verified source semantics and exact hashes but did not rerun the full suite. Final prepared source/content self-pins are checked separately.",
-    "Owner adoption qualifies only the exact known Architecture 0.1.0 manifest, inventory and dated owner-record bytes. Historical proposed origins are unchanged.",
-    "The measured repository-delivery-validation subject remains version 0.1.0 with four synthetic cases; no expanded evaluation coverage is claimed."
+    "This independent AI review does not replace human release acceptance, hosted checks, packaged resource execution, runtime admission or production activation.",
+    "The reviewer verified source semantics, native discovery evidence and exact hashes; full suite and prepared release binding are checked separately.",
+    "Only installed unmodified Codex CLI0.164.0 metadata discovery was demonstrated; referenced resource availability, released installation and useful skill execution remain separate.",
+    "Owner adoption remains limited to the exact known Architecture0.1.0 artifacts and dated record; historical proposed origins are unchanged.",
+    "The measured repository-delivery-validation subject remains version0.1.0 with four synthetic cases; no expanded evaluation coverage is claimed."
   ],
-  "findings": [
-    {
-      "id": "IMPACT-003",
-      "severity": "P2",
-      "finding": "The capabilities artifact version incorrectly changed the measured repository-delivery-validation subject to 0.2.0.",
-      "status": "addressed",
-      "resolution": "Restored artifact subject version 0.1.0 while retaining the changed catalog content digest and separate architecture-decision-management version."
-    },
-    {
-      "id": "IMPACT-004",
-      "severity": "P1",
-      "finding": "The decision skill mixed originating and Authority tracking Issues and suggested one cross-repository implementation branch.",
-      "status": "addressed",
-      "resolution": "The complete intake, runbook and output now retain native Issue identities, require an authorized Authority tracking Issue, and separate release-gated consumer changes with repository-qualified links."
-    },
-    {
-      "id": "IMPACT-005",
-      "severity": "P1",
-      "finding": "The delivery role still authorized an arbitrary originating Issue to track canonical Authority decisions.",
-      "status": "addressed",
-      "resolution": "Delivery role 0.3.0 requires the linked native Authority tracking Issue, holds when missing, routes formal changes to Authority, and maps ADR-0020 in metadata, catalog and impact coverage."
-    }
-  ]
+  "findings": []
 }
