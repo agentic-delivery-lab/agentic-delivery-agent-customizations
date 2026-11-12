@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Security
+
+- Update the locked stock fast-uri parser from 3.1.8 to 3.1.9 for four
+  URI-normalization advisories. Prepare a separate 0.1.3 candidate; published
+  0.1.2 and its immutable source/digest remain unchanged.
+
 ### Added
 
 - Prepare a prospective Primitive 0.1.0 candidate against owner-approved

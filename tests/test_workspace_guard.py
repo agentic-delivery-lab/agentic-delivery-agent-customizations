@@ -347,17 +347,30 @@ print('ready',flush=True);sys.stdin.buffer.read(1)
         self.assertEqual((worktree / 'dependency/value.txt').read_text(), 'preserve hidden submodule edit\n')
 
     def test_executable_reference_outside_cwd_and_fds_is_observed(self):
-        binary = self.root / 'synthetic-sleeper'
-        shutil.copy2(shutil.which('sleep'), binary)
-        child = subprocess.Popen([str(binary), '60'], cwd=self.temporary.name,
-                                 stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        binary = self.root / 'synthetic-executable'
+        shutil.copy2(sys.executable, binary)
+        # Observe the copied executable after exec and interpreter startup, then
+        # keep it alive through the probe without a duration-based fixture race.
+        child = subprocess.Popen([str(binary), '-c',
+                                  'import sys;print("ready",flush=True);sys.stdin.buffer.read(1)'],
+                                 cwd=self.temporary.name, stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
+            readable, _, _ = select.select([child.stdout], [], [], 5)
+            self.assertTrue(readable, 'Copied executable did not signal readiness')
+            self.assertEqual(os.read(child.stdout.fileno(), 6), b'ready\n')
+            self.assertIsNone(child.poll())
             self.assertEqual(os.readlink(f'/proc/{child.pid}/exe'), str(binary))
             result = guard.consumer_probe([self.root], service_monitors=self.service_monitors())
             self.assertIn(child.pid, [item['pid'] for item in result['consumers']])
             self.assertFalse(result['clear'])
+            self.assertIsNone(child.poll())
         finally:
-            child.terminate(); child.wait(timeout=5)
+            try:
+                child.communicate(b'x', timeout=5)
+            except subprocess.TimeoutExpired:
+                child.kill()
+                child.communicate(timeout=5)
 
     def test_worker_reader_remains_observed_after_process_leader_exits(self):
         held = self.root / 'worker-held.txt'
