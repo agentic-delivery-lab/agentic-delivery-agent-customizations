@@ -283,7 +283,7 @@ test('extracted skills resolve architecture context through an immutable release
 test('prospective release pins exact approved Architecture manifest and source artifacts', async () => {
   const { readFile } = await import('node:fs/promises');
   const release = JSON.parse(await readFile(path.resolve(import.meta.dirname, '../manifests/primitive-release.json'), 'utf8'));
-  assert.equal(release.version, '0.1.2');
+  assert.equal(release.version, '0.1.3');
   assert.equal(release.architecture.id, 'urn:agentic-delivery:architecture:authority');
   assert.equal(release.architecture.version, '0.1.0');
   assert.equal(release.architecture.releaseManifestCommit, 'ba804c044bd7dc0a7c5568062d43a1f0d9f3141b');
