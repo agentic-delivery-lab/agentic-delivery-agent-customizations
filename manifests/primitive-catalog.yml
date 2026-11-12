@@ -20,7 +20,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: delivery-workflow
     kind: skill
-    version: 0.2.1
+    version: 0.2.2
     path: skills/delivery-workflow/SKILL.md
     enforcement: instructional
     adrs: [ADR-0004, ADR-0005, ADR-0006, ADR-0007, ADR-0008]
@@ -108,7 +108,7 @@ primitives:
     domains: [agentic-delivery-governance]
   - id: source-issue-validator
     kind: validator
-    version: 0.1.0
+    version: 0.2.0
     path: validators/repository-delivery/validate-source-issue.mjs
     enforcement: deterministic
     adrs: [ADR-0007]
@@ -130,3 +130,11 @@ primitives:
     adrs: [ADR-0013, ADR-0018]
     decisionIds: [ADP-0001, ADR-0013, ADR-0018]
     domains: [agentic-primitives]
+  - id: issue-branch-starter
+    kind: capability
+    version: 0.1.0
+    path: scripts/start-issue-branch.mjs
+    enforcement: deterministic
+    adrs: [ADR-0007]
+    decisionIds: [ADR-0007]
+    domains: [agentic-delivery-governance]

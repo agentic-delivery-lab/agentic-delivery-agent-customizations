@@ -6,7 +6,7 @@
   "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "3db0082d71143f9dc726bc48c2f0849962a87387e41ea4eddb1e2c337127be1f"
+    "evidenceSha256": "2def3c98b90c4cef99e9bf257cfe166159d02ecfd84b7643d1fdc528be84cb18"
   },
   "decisions": [
     {
@@ -55,7 +55,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.1",
+          "version": "0.2.2",
           "scope": "implementation"
         },
         {
@@ -78,7 +78,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.1",
+          "version": "0.2.2",
           "scope": "implementation"
         },
         {
@@ -106,7 +106,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.1",
+          "version": "0.2.2",
           "scope": "implementation"
         },
         {
@@ -124,7 +124,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.1",
+          "version": "0.2.2",
           "scope": "implementation"
         },
         {
@@ -139,16 +139,21 @@
         },
         {
           "id": "source-issue-validator",
-          "version": "0.1.0",
+          "version": "0.2.0",
           "scope": "implementation"
         },
         {
           "id": "workspace-lifecycle-guard",
           "version": "0.1.0",
           "scope": "implementation"
+        },
+        {
+          "id": "issue-branch-starter",
+          "version": "0.1.0",
+          "scope": "implementation"
         }
       ],
-      "rationale": "The workflow and branch and source-issue validators implement issue-linked branch identity and delivery checks. The local Linux workspace guard implements advisory ownership leases and conservative local cleanup observations; hosting authorization and installation remain caller responsibilities."
+      "rationale": "The workflow and branch and source-issue validators implement issue-linked branch identity and delivery checks. The local Linux workspace guard implements advisory ownership leases and conservative local cleanup observations; hosting authorization and installation remain caller responsibilities. The consumer-bound starter performs these checks before branch creation; its capability classification records mutation without granting execution permission. Distribution installation and CI repeat checks remain separate."
     },
     {
       "decisionId": "ADR-0008",
@@ -157,7 +162,7 @@
       "affectedPrimitives": [
         {
           "id": "delivery-workflow",
-          "version": "0.2.1",
+          "version": "0.2.2",
           "scope": "implementation"
         },
         {
