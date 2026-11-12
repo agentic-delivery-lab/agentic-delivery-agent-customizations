@@ -10,6 +10,7 @@ import { validateNativeSkillSource, validatePrimitiveCatalog } from '../validato
 const root = path.resolve(import.meta.dirname, '..');
 const run = promisify(execFile);
 const baseline = '96d0852cdd3e95c7a7982a97b95d035fd77a323e';
+const correctedSource = '93c153a01058cd84165a2e92e0baf2a134645157';
 const catalog = parseYaml(await readFile(path.join(root, 'manifests/primitive-catalog.yml'), 'utf8'));
 const skills = catalog.primitives.filter(primitive => primitive.kind === 'skill');
 
@@ -45,14 +46,14 @@ test('catalog rejects the published leading-comment layout omitted by native ski
   });
 });
 
-test('canonical skill correction preserves exact YAML, metadata and instruction bytes', async () => {
+test('published skill-format correction preserves exact YAML, metadata and instruction bytes', async () => {
   assert.equal(skills.length, 4);
   for (const skill of skills) {
     const { stdout: old } = await run('git', ['-C', root, 'show', `${baseline}:${skill.path}`]);
     const original = /^(<!--[\s\S]*?-->\n\n)---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(old);
     assert.ok(original);
     const [, prefix, oldHeader, oldBody] = original;
-    const current = await readFile(path.join(root, skill.path), 'utf8');
+    const { stdout: current } = await run('git', ['-C', root, 'show', `${correctedSource}:${skill.path}`]);
     assert.equal(current, `---\n${oldHeader}\n---\n\n${prefix.trim()}\n${oldBody}`,
       `${skill.path} must contain only the metadata relocation`);
     const header = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(current);
@@ -64,5 +65,21 @@ test('canonical skill correction preserves exact YAML, metadata and instruction 
     assert.ok(metadata[0].index >= header[0].length);
     assert.equal(metadata[0][0], prefix.trim());
     assert.ok(current.endsWith(oldBody), `${skill.path} instruction body changed`);
+  }
+});
+
+test('current skills retain native discovery fields, metadata and invocation policy', async () => {
+  for (const skill of skills) {
+    const { stdout: corrected } = await run('git', ['-C', root, 'show', `${correctedSource}:${skill.path}`]);
+    const current = await readFile(path.join(root, skill.path), 'utf8');
+    assert.doesNotThrow(() => validateNativeSkillSource(current, skill));
+    const header = (source) => /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(source);
+    assert.deepEqual(parseYaml(header(current)[1]), parseYaml(header(corrected)[1]));
+    const metadata = (source) => [...source.matchAll(/<!--\s*agentic-primitive:\s*(\{[^\r\n]*\})\s*-->/g)];
+    assert.equal(metadata(current).length, 1);
+    assert.equal(metadata(current)[0][0], metadata(corrected)[0][0]);
+    const uiPath = `${path.posix.dirname(skill.path)}/agents/openai.yaml`;
+    const { stdout: previousUi } = await run('git', ['-C', root, 'show', `${correctedSource}:${uiPath}`]);
+    assert.equal(await readFile(path.join(root, uiPath), 'utf8'), previousUi);
   }
 });
