@@ -131,7 +131,18 @@ class WorkspaceGuardTests(unittest.TestCase):
                             with self.assertRaises(guard.WorkspaceHold) as caught: guard.local_cleanup_admission(lease, **request)
                             self.assertEqual(caught.exception.reason, expected)
                         else:
-                            self.assertEqual(guard.local_cleanup_admission(lease, **request)['status'], 'locally-admissible')
+                            probes = []
+                            real_probe = guard.consumer_probe
+                            def observe_probe(*args, **kwargs):
+                                result = real_probe(*args, **kwargs)
+                                probes.append(result)
+                                return result
+                            with patch.object(guard, 'consumer_probe', side_effect=observe_probe):
+                                try:
+                                    admitted = guard.local_cleanup_admission(lease, **request)
+                                except guard.WorkspaceHold as error:
+                                    self.fail(json.dumps({'hold': error.record(), 'consumerProbes': probes}, sort_keys=True))
+                            self.assertEqual(admitted['status'], 'locally-admissible')
                     self.assertTrue(worktree.exists())
                     self.assertTrue(self.git(primary, 'show-ref', '--verify', f'refs/heads/{branch}'))
                 finally:
