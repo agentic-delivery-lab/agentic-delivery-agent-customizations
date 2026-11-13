@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "releaseId": "urn:agentic-delivery:primitive-release:0.2.0",
   "version": "0.2.0",
-  "status": "draft",
+  "status": "released",
   "architecture": {
     "id": "urn:agentic-delivery:architecture:authority",
     "version": "0.1.0",
