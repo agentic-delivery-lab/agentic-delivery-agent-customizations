@@ -2,7 +2,7 @@
   "$schema": "./contracts/evaluation-catalog.schema.json",
   "schemaVersion": 1,
   "id": "offline-evaluation-catalog",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "repository": "agentic-delivery-lab/agentic-delivery-agent-customizations",
   "ownerIssue": "https://github.com/agentic-delivery-lab/agentic-delivery-agent-customizations/issues/3",
   "reportSchema": {
@@ -126,17 +126,17 @@
     },
     {
       "id": "candidate-source-issue-validator",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "kind": "candidate",
       "path": "validators/repository-delivery/validate-source-issue.mjs",
-      "sha256": "e3828ce28c5c7fdd4a59c4c86abc491be1ae75a83f0a048b152487641fd2dcb7"
+      "sha256": "59a9516df34b480b1f88f494e594c04acfdf0886b5edde4ef8911ef9f5340736"
     },
     {
       "id": "candidate-capabilities-catalog",
       "version": "0.1.0",
       "kind": "candidate",
       "path": "capabilities/catalog.yml",
-      "sha256": "a808fcd6cbecb88bc686b4deae6bb8fe734c58edfd94dfa18716748e5e5f5794"
+      "sha256": "97dfa6c7ff6d04778d1aad5446f6717fd4156e40d59aceb74fea2aabbdc15ddd"
     }
   ]
 }

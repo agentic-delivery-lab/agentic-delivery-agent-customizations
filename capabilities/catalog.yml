@@ -12,3 +12,7 @@ capabilities:
     version: 0.1.0
     primitiveIds: [workspace-lifecycle-guard]
     deterministic: true
+  - id: issue-linked-branch-creation
+    version: 0.1.0
+    primitiveIds: [issue-branch-starter, issue-branch-name-validator, source-issue-validator]
+    deterministic: true

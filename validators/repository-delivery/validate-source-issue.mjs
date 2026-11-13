@@ -27,6 +27,45 @@ function validRepository(repository) {
   return /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository);
 }
 
+// Consumer profiles supply this context; Issue text cannot select a repository.
+// Keep the historical validateSourceIssue interface for existing consumers.
+export async function validateBoundSourceIssue(issueNumber, {
+  repositoryRoot, repositoryIdentity, env = process.env, execFileImpl = execFileAsync,
+} = {}) {
+  if (!validIssueNumber(issueNumber) || !Number.isSafeInteger(Number(issueNumber))
+    || typeof repositoryRoot !== 'string' || !path.isAbsolute(repositoryRoot)
+    || !repositoryIdentity || Object.keys(repositoryIdentity).sort().join(',') !== 'id,name'
+    || !/^[A-Za-z0-9][A-Za-z0-9-]*\/[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(repositoryIdentity.name)
+    || !Number.isSafeInteger(repositoryIdentity.id) || repositoryIdentity.id < 1) {
+    throw new SourceIssueValidationError('Source issue check requires an explicit consumer root, native repository identity and positive issue number.', 2);
+  }
+  const { name, id } = repositoryIdentity;
+  for (const key of ['GH_REPO', 'GITHUB_REPOSITORY']) {
+    const selected = env[key]?.replace(/^github\.com\//i, '');
+    if (selected && selected.toLowerCase() !== name.toLowerCase()) throw fail('conflicting repository selector.');
+  }
+  if (env.GH_HOST && env.GH_HOST.toLowerCase() !== 'github.com') throw fail('conflicting GitHub host selector.');
+  async function read(endpoint) {
+    try {
+      const { stdout } = await execFileImpl('gh', ['api', '--hostname', 'github.com', '--method', 'GET', endpoint], {
+        cwd: repositoryRoot, env, encoding: 'utf8', windowsHide: true, timeout: 30_000, maxBuffer: 1024 * 1024,
+      });
+      return JSON.parse(stdout);
+    } catch {
+      throw fail('selected GitHub source could not be read or verified.');
+    }
+  }
+  const repository = await read(`repos/${name}`);
+  if (repository.id !== id || typeof repository.full_name !== 'string'
+    || repository.full_name.toLowerCase() !== name.toLowerCase()) throw fail('native repository identity does not match the consumer.');
+  const issue = await read(`repos/${name}/issues/${issueNumber}`);
+  const url = `https://github.com/${repository.full_name}/issues/${issueNumber}`;
+  if (issue.number !== Number(issueNumber) || issue.html_url !== url
+    || Object.hasOwn(issue, 'pull_request')) throw fail('selected source issue URL or Issue type does not match the consumer.');
+  if (issue.state !== 'open') throw fail(`issue #${issueNumber} is not open.`);
+  return Object.freeze({ issueNumber, repository: repository.full_name, repositoryId: id, url });
+}
+
 async function localRepository(execFileImpl, env) {
   if (env.GITHUB_REPOSITORY) return env.GITHUB_REPOSITORY;
   try {

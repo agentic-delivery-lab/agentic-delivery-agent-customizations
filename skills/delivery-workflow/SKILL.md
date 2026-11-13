@@ -17,6 +17,11 @@ For an architectural choice, resolve and read `decisions/README.md` and the ADR 
 
 ## Work from the trunk
 
+- Resolve the consumer root and its installed tools through the
+  [consumer tool contract](../../references/consumer-tools.md). A packaged skill
+  does not install commands. Hold when the admitted profile, exact tools or
+  consumer identity are unavailable; do not substitute raw Git or infer runner
+  authorization from an open Issue.
 - Keep `main` deployable and use a short-lived feature branch for each change.
 - Branch from the current `main`; keep the branch's pull-request head separate from `main`, which is the protected base. Use `pnpm branch:start <type> <issue-number> <summary>` from a clean, synchronized `main` so the supported path verifies an open source issue before creating an issue-linked branch. Names use `<type>/issue-<number>-<lowercase-kebab-case-summary>`. Never open a pull request with `main` as its head.
 - Finish a feature branch within two calendar days when practical. Integrate through a review pull request as soon as the change is complete.
@@ -36,12 +41,18 @@ reviewer. Use `Not applicable` only with a reason. The deterministic
 pull request authored by `dependabot[bot]` is explicitly exempt; do not broaden
 that exception to another bot, app, user, or team.
 
-The versioned main-branch ruleset requires this check. The repository is public,
-but the rule remains policy until an authorized maintainer applies it after the
-workflow is on `main` and verifies the live repository ruleset through GitHub.
-Do not claim live enforcement from the JSON file alone.
+The organization PR-body contract applies to the consumer. A versioned ruleset
+or workflow remains policy until an authorized maintainer activates and verifies
+the actual hosting rule and check. Repository visibility does not establish
+enforcement. Do not claim a live gate from a packaged skill or JSON file alone.
 
-The branch starter rejects a closed, missing or unreadable source issue and rejects a pull request number even when it is open. Use `pnpm lint:branch <branch-name>` for a candidate that already exists. CI repeats the branch syntax and open-issue checks when an internal pull request is opened or updated. A raw Git branch command can bypass the local helper, but it cannot pass the pull-request check with an invalid name or source issue.
+The installed branch starter rejects a closed, missing or unreadable source
+Issue and a PR number even when open. Its explicit consumer context binds Git
+state, native repository identity and the exact Issue URL. Use the installed
+`pnpm lint:branch <branch-name>` alias for an existing candidate. Verify that
+the consumer's internal PR check repeats syntax and open source-Issue checks;
+do not infer live CI enforcement from this skill, a copied workflow or a
+versioned ruleset alone. Raw Git does not perform the supported prechecks.
 
 ## Coordinate workspace ownership
 
@@ -97,7 +108,13 @@ Keep the description short and explain why in the body when needed. Use a breaki
 
 ## Maintain the changelog
 
-Keep this repository's [`CHANGELOG.md`](../../CHANGELOG.md) curated for people. Add user-relevant changes under `[Unreleased]` and use the Keep a Changelog categories: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` and `Security`. Do not generate a raw commit dump, invent a release date or create a tag or release as part of ordinary feature work. A release is a separate, explicitly authorized human action using a SemVer version and an ISO 8601 date.
+Keep the consumer repository's `CHANGELOG.md` beneath its verified root curated
+for people. This is a consumer workfile, not a link to a packaged producer
+changelog. Add user-relevant changes under `[Unreleased]` and use the Keep a
+Changelog categories: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` and
+`Security`. Do not generate a raw commit dump, invent a release date or create
+a tag or release as part of ordinary feature work. A release is a separate,
+explicitly authorized human action using a SemVer version and an ISO 8601 date.
 
 Review whether a change belongs in the changelog and whether its wording is useful to readers; the validator can check structure, not relevance or meaning.
 

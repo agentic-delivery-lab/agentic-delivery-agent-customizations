@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Bind reusable delivery guidance to the consumer's installed tool profile and
+  changelog workfile. Add a canonical branch-creation capability with explicit
+  consumer root/native identity, exact open-Issue verification and conservative
+  Git-state checks. Distribution installation, internal PR checks and managed
+  lease inheritance require separate qualification; default permissions are
+  unchanged.
+
 ### Security
 
 - Update the locked stock fast-uri parser from 3.1.8 to 3.1.9 for four
