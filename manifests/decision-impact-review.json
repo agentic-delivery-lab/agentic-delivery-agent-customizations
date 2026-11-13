@@ -6,7 +6,7 @@
   "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb",
   "semanticReview": {
     "evidencePath": "manifests/decision-impact-review-evidence.json",
-    "evidenceSha256": "2def3c98b90c4cef99e9bf257cfe166159d02ecfd84b7643d1fdc528be84cb18"
+    "evidenceSha256": "76c90d71f663b7a573f01f1e995e0345673e76d89bd59ce9d819ca2e9732d644"
   },
   "decisions": [
     {

@@ -43,7 +43,7 @@ export async function startIssueBranch({ branchType, issueNumber, summary,
   async function inspect() {
     if (await realpath(await run(['rev-parse', '--show-toplevel'])) !== root) throw new BranchStartError('Selected root is not the consumer repository root.');
     if (await run(['branch', '--show-current']) !== 'main') throw new BranchStartError('Branch start requires the consumer main branch.');
-    if (await run(['status', '--porcelain'])) throw new BranchStartError('Consumer main has uncommitted changes.');
+    if (await run(['status', '--porcelain', '--untracked-files=all'])) throw new BranchStartError('Consumer main has uncommitted changes.');
     const origin = (await run(['remote', 'get-url', 'origin'])).replace(/\.git$/, '');
     if (!originNames.some((value) => value.toLowerCase() === origin.toLowerCase())) throw new BranchStartError('Consumer origin does not match the selected native repository identity.');
     const head = await run(['rev-parse', '--verify', 'HEAD^{commit}']);

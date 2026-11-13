@@ -153,3 +153,30 @@ test('successful Git inspection with unreadable-state diagnostics cannot declare
   assert.equal((await git('branch', '--show-current')).stdout.trim(), 'main');
   assert.equal((await git('branch', '--list', 'feat/issue-2-consumer-work')).stdout.trim(), '');
 });
+
+
+test('hidden untracked work cannot pass either clean-main inspection', async (t) => {
+  for (const phase of ['before-api', 'during-api']) {
+    const { root, git } = await fixture(t);
+    await git('config', 'status.showUntrackedFiles', 'no');
+    const unfinished = path.join(root, 'unfinished.txt');
+    if (phase === 'before-api') await writeFile(unfinished, 'preserve unfinished work\n');
+    const input = request(root);
+    const boundary = input.execFileImpl;
+    let reads = 0;
+    input.execFileImpl = async (command, args, options) => {
+      if (command === 'gh') reads += 1;
+      const response = await boundary(command, args, options);
+      if (command === 'gh' && args.at(-1).endsWith('/issues/2') && phase === 'during-api') {
+        await writeFile(unfinished, 'preserve unfinished work\n');
+      }
+      return response;
+    };
+    await assert.rejects(startIssueBranch(input), /uncommitted changes/);
+    if (phase === 'before-api') assert.equal(reads, 0);
+    else assert.equal(reads, 2);
+    assert.equal((await git('branch', '--show-current')).stdout.trim(), 'main');
+    assert.equal((await git('branch', '--list', 'feat/issue-2-consumer-work')).stdout.trim(), '');
+    assert.equal((await git('status', '--porcelain', '--untracked-files=all')).stdout.trim(), '?? unfinished.txt');
+  }
+});

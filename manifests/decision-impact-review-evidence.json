@@ -6,18 +6,18 @@
     "type": "independent-agent-review",
     "independentOf": "implementation-author"
   },
-  "reviewedAt": "2026-11-12T21:36:51Z",
+  "reviewedAt": "2026-11-13T02:35:26Z",
   "reviewScope": "decision-to-primitive-impact",
   "target": {
     "primitiveCatalogSha256": "ac5433c4c913540b2292108a750f5a0e292226e2835173f1abc1854e971252bc",
-    "primitiveSourcesSha256": "b4f5db273b3f8284a537005a976a92167149173bffdd3af91057178b5bf134de",
+    "primitiveSourcesSha256": "3438b332ec75f4592db166bff8b6fb5f2e480d0fdd70687cab0eefb6dfac89b7",
     "decisionSetSha256": "8dfcfc13a10a5cf7d0da48ba402fee419958805d8841d66459557a1cdb738ae2",
     "architectureReleaseManifestCommit": "ba804c044bd7dc0a7c5568062d43a1f0d9f3141b",
     "architectureSourceCommit": "0423533176ad6239fe5d828736605b5a6360293c",
     "decisionInventorySha256": "cd5df6c97365dd469c35fb47351d70e1a0bbd5bbc3adb99e09ec930660b825cb"
   },
   "outcome": "no-blocking-mapping-findings",
-  "summary": "Fresh separate read-only reviewer /root/review_pr4 verified all 17 Primitive targets and 24 canonical decisions: 20 affected, four justified no-impact and zero provisional. Consumer identity, branch mutation, workfile and profile boundaries preserve the unchanged default-deny policy. Git inspection diagnostics and measured-subject metadata findings were corrected and reviewed again. No Critical or Required findings remain; exact target hashes were independently reproduced.",
+  "summary": "Fresh separate read-only reviewer /root/review_pr4 re-reviewed all 17 Primitive targets and 24 canonical decisions after the native PR review finding: 20 affected, four justified no-impact and zero provisional. Explicit untracked-file enumeration applies to both clean-main inspections; real-Git regressions cover hidden work before and during API access. Consumer binding, mutation boundaries, mappings, Architecture pins, default-deny policy and unchanged four-case evaluation remain valid. No Critical or Required findings remain; exact target hashes were independently reproduced.",
   "limitations": [
     "This AI source/mapping review does not grant owner release acceptance, network/secret permissions, installed consumer aliases, lease integration or runtime admission.",
     "The changed consumer helper is covered by real-Git tests with a synthetic native API boundary; actual accepted-source installation and positive T10 qualification remain separate.",
@@ -38,6 +38,13 @@
       "finding": "Changing the capability-catalog artifact version would falsely relabel the unchanged measured validation subject.",
       "status": "addressed",
       "resolution": "The capability-catalog artifact retains subject version 0.1.0 with its actual updated byte hash; dataset, selection and four-case coverage remain unchanged."
+    },
+    {
+      "id": "IMPACT-003",
+      "severity": "P2",
+      "finding": "Git status.showUntrackedFiles=no can hide unfinished work from both clean-main inspections.",
+      "status": "addressed",
+      "resolution": "Both inspections explicitly request --untracked-files=all. Real-Git red regression reproduced unintended branch creation; all nine boundary tests passed after correction, including hidden work before API access and created during API access. Native review discussion4556791241 remains recorded."
     }
   ]
 }
